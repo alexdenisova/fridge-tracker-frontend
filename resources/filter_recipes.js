@@ -1,7 +1,9 @@
+import { unpressAddRecipeButton } from './add_recipe.js';
 import { getIngredientId } from "./backend/ingredients.js";
 import { RECIPES_ID, showRecipes } from "./recipes.js";
 import { hideElement, showElement } from "./utils.js";
 
+const FILTER_BUTTON_ID = "filter_recipes_button";
 const FILTER_ID = "filter_div";
 const FILTER_POPUP_ID = "filter_popup";
 const FILTER_TEXT_ID = "filter_text";
@@ -11,7 +13,7 @@ const FILTER_INGREDIENT_LIST_ID = "filter_ingredient_list"
 const main = document.getElementById("section");
 
 window.filterButton = function (filter_id) {
-  if (document.getElementById(filter_id).style.backgroundColor == "rgb(67, 123, 120)") {
+  if (document.getElementById(filter_id).style.backgroundColor == "rgb(67, 123, 120)") { // if button is pressed
     if (document.getElementById(FILTER_ID).style.display == "none") {
       hideElement(RECIPES_ID);
       showElement(FILTER_ID);
@@ -23,11 +25,19 @@ window.filterButton = function (filter_id) {
   } else {
     document.getElementById(filter_id).style.backgroundColor = "#437b78";
     hideElement(RECIPES_ID);
+    unpressAddRecipeButton();
     if (document.getElementById(FILTER_ID) == null) {
       addFilter();
     } else {
       showElement(FILTER_ID);
     }
+  }
+}
+
+export function unpressFilterButton() {
+  document.getElementById(FILTER_BUTTON_ID).style.backgroundColor = "#b4d6b4";
+  if (document.getElementById(FILTER_ID) != null) {
+    hideElement(FILTER_ID);
   }
 }
 

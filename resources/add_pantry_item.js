@@ -8,7 +8,7 @@ const ADD_PANTRY_ITEM_ID = "add_pantry_item_form";
 const main = document.getElementById("section");
 
 window.addPantryItemButton = function (add_id) {
-  if (document.getElementById(add_id).style.backgroundColor == "rgb(67, 123, 120)") {
+  if (document.getElementById(add_id).style.backgroundColor == "rgb(67, 123, 120)") { // if button is pressed
     document.getElementById(add_id).style.backgroundColor = "#b4d6b4";
     hideElement(ADD_PANTRY_ITEM_ID);
     showElement(PANTRY_ITEMS_ID);

@@ -2,30 +2,39 @@ import { createIngredientIfNotExists } from "./backend/ingredients.js";
 import { getParseIngredients } from "./backend/parse_ingredients.js";
 import { postRecipeIngredient } from "./backend/recipe_ingredients.js";
 import { postRecipe } from "./backend/recipes.js";
+import { unpressFilterButton } from "./filter_recipes.js";
 import { RECIPES_ID } from "./recipes.js";
 import { hideElement, showElement, showMessage } from "./utils.js";
 
-export const PARSE_INGREDIENTS_ENDPOINT = 'http://localhost:8081/parse_ingredients';
-const RECIPE_INGREDIENTS_ENDPOINT = 'http://localhost:8081/recipe_ingredients';
+import { v4 as uuidv4 } from 'uuid';
 
+const ADD_RECIPE_BUTTON_ID = "add_recipe_button";
 const ADD_RECIPE_ID = "add_recipes_form";
 const PARSED_INGREDIENT_TABLE_ID = "parsed_ingredient_table";
 
 const main = document.getElementById("section");
 
 window.addRecipeButton = function (add_id) {
-  if (document.getElementById(add_id).style.backgroundColor == "rgb(67, 123, 120)") {
+  if (document.getElementById(add_id).style.backgroundColor == "rgb(67, 123, 120)") { // if button is pressed
     document.getElementById(add_id).style.backgroundColor = "#b4d6b4";
     hideElement(ADD_RECIPE_ID);
     showElement(RECIPES_ID);
   } else {
     document.getElementById(add_id).style.backgroundColor = "#437b78";
     hideElement(RECIPES_ID);
+    unpressFilterButton();
     if (document.getElementById(ADD_RECIPE_ID) == null) {
       addForm();
     } else {
       showElement(ADD_RECIPE_ID, "block");
     }
+  }
+}
+
+export function unpressAddRecipeButton() {
+  document.getElementById(ADD_RECIPE_BUTTON_ID).style.backgroundColor = "#b4d6b4";
+  if (document.getElementById(ADD_RECIPE_ID) != null) {
+    hideElement(ADD_RECIPE_ID);
   }
 }
 
@@ -62,8 +71,8 @@ window.submitRecipe = async function () {
   const result = await postRecipe(name, cooking_time_mins, link, instructions, image);
   if (result != null) {
     console.log("Created recipe with id {}", result.id);
-    const ing_result = await postRecipeIngredients(result.id);
-    if (ing_result != null) {
+    const all_ingredients_added = await postRecipeIngredients(result.id);
+    if (all_ingredients_added) {
       showMessage("Recipe added successfully!", true);
     } else {
       showMessage("Recipe added, but not all ingredients!", false);
@@ -80,14 +89,20 @@ window.submitRecipe = async function () {
 async function postRecipeIngredients(recipe_id) {
   const table = document.getElementById(PARSED_INGREDIENT_TABLE_ID);
 
+  let all_ingredients_added = true;
   for (var i = 0; i < table.childElementCount - 1; i++) {
-    let amount = document.getElementById(PARSED_INGREDIENT_TABLE_ID + "-" + i + "-0");
-    let unit = document.getElementById(PARSED_INGREDIENT_TABLE_ID + "-" + i + "-1");
-    let name = document.getElementById(PARSED_INGREDIENT_TABLE_ID + "-" + i + "-2");
-    let optional = document.getElementById(PARSED_INGREDIENT_TABLE_ID + "-" + i + "-3");
+    const tr_id = table.children[i + 1].id;
+    let amount = document.getElementById(tr_id + "-0");
+    let unit = document.getElementById(tr_id + "-1");
+    let name = document.getElementById(tr_id + "-2");
+    let optional = document.getElementById(tr_id + "-3");
     const ingredient_id = await createIngredientIfNotExists(name.value);
-    return await postRecipeIngredient(recipe_id, ingredient_id, optional.checked, amount.value, unit.value);
+    const result = await postRecipeIngredient(recipe_id, ingredient_id, optional.checked, amount.value, unit.value);
+    if (result == null) {
+      all_ingredients_added = false;
+    }
   }
+  return all_ingredients_added;
 }
 
 window.parseIngredients = function (input_id) {
@@ -132,13 +147,16 @@ window.addIngredientRow = addIngredientRow;
 function addIngredientRow(amount = "", unit = "", name = "") {
   console.log(amount + unit + name);
   const table = document.getElementById(PARSED_INGREDIENT_TABLE_ID);
-  let index = Number(table.childElementCount) - 1;
   const tr = document.createElement('tr');
+  const tr_id = uuidv4();
+  tr.setAttribute("id", tr_id);
   tr.innerHTML = `
-      <td><input type="text" id="${PARSED_INGREDIENT_TABLE_ID}-${index}-0" value="${amount}"></td>
-      <td><input type="text" id="${PARSED_INGREDIENT_TABLE_ID}-${index}-1" value="${unit}"></td>
-      <td><input type="text" id="${PARSED_INGREDIENT_TABLE_ID}-${index}-2" value="${name}"></td>
-      <td><input type="checkbox" id="${PARSED_INGREDIENT_TABLE_ID}-${index}-3"></td>`;
+      <td><input type="text" id="${tr_id}-0" value="${amount}"></td>
+      <td><input type="text" id="${tr_id}-1" value="${unit}"></td>
+      <td><input type="text" id="${tr_id}-2" value="${name}"></td>
+      <td><input type="checkbox" id="${tr_id}-3"></td>
+      <td><img src="http://findicons.com/files/icons/1715/gion/24/dialog_cancel.png"
+      onclick='removeElement("${tr_id}")'></td>`;
   table.appendChild(tr);
   return false;
 }
