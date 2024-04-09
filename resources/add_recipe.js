@@ -1,5 +1,6 @@
 import { createIngredientIfNotExists } from "./backend/ingredients.js";
 import { getParseIngredients } from "./backend/parse_ingredients.js";
+import { getParseRecipeLink } from "./backend/parse_recipe_link.js.js";
 import { postRecipeIngredient } from "./backend/recipe_ingredients.js";
 import { postRecipe } from "./backend/recipes.js";
 import { unpressFilterButton } from "./filter_recipes.js";
@@ -103,6 +104,13 @@ async function postRecipeIngredients(recipe_id) {
     }
   }
   return all_ingredients_added;
+}
+
+window.parseLink = function (link_id) {
+  getParseRecipeLink(document.getElementById(link_id).value)
+  .then(function(data) {
+    // TODO: fill all fields of form with results
+  })
 }
 
 window.parseIngredients = function (input_id) {
