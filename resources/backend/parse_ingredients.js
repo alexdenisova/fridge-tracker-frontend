@@ -1,4 +1,4 @@
-const PARSE_INGREDIENTS_ENDPOINT = 'http://localhost:8081/parse_ingredients';
+const PARSE_INGREDIENTS_ENDPOINT = 'http://localhost:8080/api/parse_ingredients';
 
 
 export async function getParseIngredients(text) {
@@ -9,10 +9,6 @@ export async function getParseIngredients(text) {
       'Content-Type': 'application/json'
     },
   }).then(response => {
-    if (!response.ok) {
-      return null;
-    } else {
-      return response.json();
-    }
+    return response;
   });
 }

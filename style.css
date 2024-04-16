@@ -49,17 +49,19 @@ button {
 }
 
 form {
-  width: 200px;
+  width: 300px;
   height: 30px;
   border-radius: 11px;
 }
 
 input {
   font: 15px system-ui;
-  height: 100%;
-  width: 100%;
-  padding: 6px 9px;
-  border: none;
+  height: 60%;
+  width: 60%;
+  padding: 5px 9px;
+  border: 1px solid;
+  margin-bottom: 5px;
+  margin-top: 5px;
 }
 
 .title {
@@ -139,12 +141,13 @@ li p {
   width: 200px;
   height: 50px;
   border: 1px solid;
-  padding: 15px 10px 15px 50px;
+  padding: 15px 50px 15px 50px;
   background-repeat: no-repeat;
-  background-position: 10px center;
+  background-position: center;
   color: #180f0c;
   background-color: #ff7b00;
   background-image: url('images/icons/warning.gif');
+  text-align: center;
 }
 
 .message_close {
@@ -153,7 +156,7 @@ li p {
   top: 50%;
   left: 50%;
   margin-top: -110px;
-  margin-left: 150px;
+  margin-left: 190px;
   height: 20px;
   width: 20px;
   cursor: pointer;

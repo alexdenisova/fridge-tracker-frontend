@@ -1,5 +1,5 @@
 
-export const RECIPE_ENDPOINT = 'http://localhost:8081/recipes';
+export const RECIPE_ENDPOINT = 'http://localhost:8080/api/recipes';
 
 export async function getRecipe(id) {
   return await fetch(RECIPE_ENDPOINT + `/${id}`, {
@@ -9,11 +9,7 @@ export async function getRecipe(id) {
       'Content-Type': 'application/json'
     },
   }).then(response => {
-    if (!response.ok) {
-      return null;
-    } else {
-      return response.json();
-    }
+      return response;
   });
 }
 
@@ -22,7 +18,6 @@ export async function listRecipes(query_params = null) {
   if (query_params != null) {
     url += "?" + query_params;
   }
-  console.log("wait");
   return await fetch(url, {
     method: 'GET',
     headers: {
@@ -30,11 +25,7 @@ export async function listRecipes(query_params = null) {
       'Content-Type': 'application/json'
     },
   }).then(response => {
-    if (!response.ok) {
-      return null;
-    } else {
-      return response.json();
-    }
+      return response;
   });
 }
 
@@ -53,10 +44,6 @@ export async function postRecipe(name, cooking_time_mins = null, link = null, in
       ...image && { 'image': image },
     })
   }).then(response => {
-    if (!response.ok) {
-      return null;
-    } else {
-      return response.json();
-    }
+      return response;
   });
 }

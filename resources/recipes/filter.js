@@ -1,7 +1,8 @@
-import { unpressAddRecipeButton } from './add_recipe.js';
-import { getIngredientId } from "./backend/ingredients.js";
-import { RECIPES_ID, showRecipes } from "./recipes.js";
-import { hideElement, showElement } from "./utils.js";
+import { getIngredientId } from "../backend/ingredients.js";
+import { showRecipes } from "./list.js";
+import { buttonIsPressed, clickButton, hideElement, showElement } from "../utils.js";
+import { unpressAddRecipeButton } from './add.js';
+import { RECIPES_ID, main } from "./constants.js";
 
 const FILTER_BUTTON_ID = "filter_recipes_button";
 const FILTER_ID = "filter_div";
@@ -10,20 +11,18 @@ const FILTER_TEXT_ID = "filter_text";
 const FILTER_ADD_BUTTON_ID = "filter_add";
 const FILTER_INGREDIENT_LIST_ID = "filter_ingredient_list"
 
-const main = document.getElementById("section");
-
 window.filterButton = function (filter_id) {
-  if (document.getElementById(filter_id).style.backgroundColor == "rgb(67, 123, 120)") { // if button is pressed
+  if (buttonIsPressed(filter_id)) {
     if (document.getElementById(FILTER_ID).style.display == "none") {
       hideElement(RECIPES_ID);
       showElement(FILTER_ID);
     } else {
-      document.getElementById(filter_id).style.backgroundColor = "#b4d6b4";
+      clickButton(filter_id)
       hideElement(FILTER_ID);
       showElement(RECIPES_ID);
     }
   } else {
-    document.getElementById(filter_id).style.backgroundColor = "#437b78";
+    clickButton(filter_id)
     hideElement(RECIPES_ID);
     unpressAddRecipeButton();
     if (document.getElementById(FILTER_ID) == null) {

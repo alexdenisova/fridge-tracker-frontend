@@ -1,6 +1,6 @@
-const INGREDIENT_ENDPOINT = 'http://localhost:8081/ingredients';
+const INGREDIENT_ENDPOINT = 'http://localhost:8080/api/ingredients';
 
-export async function getIngredientName(ingredient_id) {
+export async function getIngredient(ingredient_id) {
   return await fetch(INGREDIENT_ENDPOINT + `/${ingredient_id}`, {
     method: 'GET',
     headers: {
@@ -8,13 +8,18 @@ export async function getIngredientName(ingredient_id) {
       'Content-Type': 'application/json'
     },
   }).then(response => {
+    return response;
+  });
+}
+
+export async function getIngredientName(ingredient_id) {
+  return await getIngredient(ingredient_id).then(async response => {
     if (!response.ok) {
       return null;
     } else {
-      return response.json();
+      const data = await response.json();
+      return data.name;
     }
-  }).then(data => {
-    return data.name;
   });
 }
 
@@ -35,7 +40,7 @@ export async function getIngredientId(ingredient_name) {
     });
 }
 
-export async function postIngredient(ingredient_name) {
+export async function postIngredient(ingredient_name, can_be_eaten_raw) {
   return await fetch(INGREDIENT_ENDPOINT, {
     method: 'POST',
     headers: {
@@ -44,23 +49,46 @@ export async function postIngredient(ingredient_name) {
     },
     body: JSON.stringify({
       "name": ingredient_name,
+      ...can_be_eaten_raw && { 'can_be_eaten_raw': can_be_eaten_raw },
     })
   }).then(response => {
-    if (!response.ok) {
-      return null;
-    } else {
-      return response.json();
-    }
+    return response;
+  });
+}
+
+export async function putIngredient(ingredient_id, ingredient_name, can_be_eaten_raw) {
+  return await fetch(INGREDIENT_ENDPOINT + "/" + ingredient_id, {
+    method: 'PUT',
+    headers: {
+      'Accept': 'application/json, text/plain, */*',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      "name": ingredient_name,
+      ...can_be_eaten_raw && { 'can_be_eaten_raw': can_be_eaten_raw },
+    })
+  }).then(response => {
+    return response;
   });
 }
 
 // returns ingredient_id
-export async function createIngredientIfNotExists(ingredient_name) {
+export async function makeIngredientIfNotExists(ingredient_name, can_be_eaten_raw = null) {
   return await getIngredientId(ingredient_name).then(async ingredient_id => {
     if (ingredient_id != null) {
+      await putIngredient(ingredient_id, ingredient_name, can_be_eaten_raw);
       return ingredient_id;
     } else {
-      return (await postIngredient(ingredient_name)).id
+      const response = await postIngredient(ingredient_name, can_be_eaten_raw);
+      if (!response.ok) {
+        if (response.status == 401) {
+          redirectToLogin();
+          return false;
+        }
+        return null;
+      }
+      const data = await response.json();
+      return data.id;
     }
   })
 }

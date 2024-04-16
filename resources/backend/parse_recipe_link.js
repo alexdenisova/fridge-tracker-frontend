@@ -1,4 +1,4 @@
-const PARSE_RECIPE_LINK_ENDPOINT = 'http://localhost:8081/parse_recipe_link';
+const PARSE_RECIPE_LINK_ENDPOINT = 'http://localhost:8080/api/parse_recipe_link';
 
 
 export async function getParseRecipeLink(link) {
@@ -9,10 +9,6 @@ export async function getParseRecipeLink(link) {
       'Content-Type': 'application/json'
     },
   }).then(response => {
-    if (!response.ok) {
-      return null;
-    } else {
-      return response.json();
-    }
+    return response;
   });
 }
