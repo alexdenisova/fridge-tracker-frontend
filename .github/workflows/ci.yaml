@@ -2,9 +2,9 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
@@ -17,3 +17,16 @@ jobs:
           cache: "npm"
       - run: npm ci
       - run: npm run build
+      - uses: actions/upload-artifact@master
+        with:
+          name: build
+          path: dist
+  publish-image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@master
+        with:
+          name: build
+          path: dist
+      - run: docker build -t fridge-tracker-frontend:$(date +%s)
