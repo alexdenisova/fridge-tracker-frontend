@@ -34,11 +34,11 @@ jobs:
         with:
           name: build
           path: dist
-      - run: docker build -t fridge-tracker-frontend:$(date +%s) .
+      - run: docker build -t fridge-tracker-frontend .
       - name: Log in to the Container registry
         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.PACKAGES_TOKEN }}
-      
+      - run: docker push fridge-tracker-frontend ${REGISTRY}/${GITHUB_ACTOR}/fridge-tracker-frontend:$(date +%s)
