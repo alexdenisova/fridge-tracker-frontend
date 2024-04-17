@@ -16,5 +16,6 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
+      - run: echo $default-branch
       - run: npm ci
       - run: npm run build
