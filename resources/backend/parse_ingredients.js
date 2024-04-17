@@ -1,4 +1,4 @@
-const PARSE_INGREDIENTS_ENDPOINT = 'http://localhost:8080/api/parse_ingredients';
+import { PARSE_INGREDIENTS_ENDPOINT } from "./constant";
 
 
 export async function getParseIngredients(text) {

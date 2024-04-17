@@ -1,4 +1,4 @@
-const PARSE_RECIPE_LINK_ENDPOINT = 'http://localhost:8080/api/parse_recipe_link';
+import { PARSE_RECIPE_LINK_ENDPOINT } from "./constant";
 
 
 export async function getParseRecipeLink(link) {

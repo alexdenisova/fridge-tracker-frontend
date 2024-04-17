@@ -1,4 +1,6 @@
-const INGREDIENT_ENDPOINT = 'http://localhost:8080/api/ingredients';
+import { responseIsOk } from "../utils";
+import { INGREDIENT_ENDPOINT } from "./constant";
+
 
 export async function getIngredient(ingredient_id) {
   return await fetch(INGREDIENT_ENDPOINT + `/${ingredient_id}`, {
@@ -56,15 +58,14 @@ export async function postIngredient(ingredient_name, can_be_eaten_raw) {
   });
 }
 
-export async function putIngredient(ingredient_id, ingredient_name, can_be_eaten_raw) {
+export async function patchIngredient(ingredient_id, can_be_eaten_raw) {
   return await fetch(INGREDIENT_ENDPOINT + "/" + ingredient_id, {
-    method: 'PUT',
+    method: 'PATCH',
     headers: {
       'Accept': 'application/json, text/plain, */*',
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      "name": ingredient_name,
       ...can_be_eaten_raw && { 'can_be_eaten_raw': can_be_eaten_raw },
     })
   }).then(response => {
@@ -76,8 +77,16 @@ export async function putIngredient(ingredient_id, ingredient_name, can_be_eaten
 export async function makeIngredientIfNotExists(ingredient_name, can_be_eaten_raw = null) {
   return await getIngredientId(ingredient_name).then(async ingredient_id => {
     if (ingredient_id != null) {
-      await putIngredient(ingredient_id, ingredient_name, can_be_eaten_raw);
-      return ingredient_id;
+      const response = await getIngredient(ingredient_id);
+      if (responseIsOk(response)) {
+        const ingredient = await response.json();
+        if (ingredient.can_be_eaten_raw != can_be_eaten_raw) {
+          await patchIngredient(ingredient_id, can_be_eaten_raw);
+        }
+        return ingredient_id;
+      } else {
+        return null;
+      }
     } else {
       const response = await postIngredient(ingredient_name, can_be_eaten_raw);
       if (!response.ok) {

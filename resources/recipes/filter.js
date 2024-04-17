@@ -1,8 +1,8 @@
 import { getIngredientId } from "../backend/ingredients.js";
-import { showRecipes } from "./list.js";
 import { buttonIsPressed, clickButton, hideElement, showElement } from "../utils.js";
 import { unpressAddRecipeButton } from './add.js';
-import { RECIPES_ID, main } from "./constants.js";
+import { LIST_ID, main } from "./constants.js";
+import { showRecipes } from "./list.js";
 
 const FILTER_BUTTON_ID = "filter_recipes_button";
 const FILTER_ID = "filter_div";
@@ -14,16 +14,16 @@ const FILTER_INGREDIENT_LIST_ID = "filter_ingredient_list"
 window.filterButton = function (filter_id) {
   if (buttonIsPressed(filter_id)) {
     if (document.getElementById(FILTER_ID).style.display == "none") {
-      hideElement(RECIPES_ID);
+      hideElement(LIST_ID);
       showElement(FILTER_ID);
     } else {
       clickButton(filter_id)
       hideElement(FILTER_ID);
-      showElement(RECIPES_ID);
+      showElement(LIST_ID);
     }
   } else {
     clickButton(filter_id)
-    hideElement(RECIPES_ID);
+    hideElement(LIST_ID);
     unpressAddRecipeButton();
     if (document.getElementById(FILTER_ID) == null) {
       addFilter();
@@ -87,7 +87,7 @@ window.filterRecipes = async function () {
   }
   ingredient_list += "]";
   hideElement(FILTER_ID);
-  removeElement(RECIPES_ID);
+  removeElement(LIST_ID);
   showRecipes(`ingredient_ids=${ingredient_list}`)
-  showElement(RECIPES_ID);
+  showElement(LIST_ID);
 }

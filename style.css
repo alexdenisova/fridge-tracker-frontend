@@ -49,7 +49,7 @@ button {
 }
 
 form {
-  width: 300px;
+  width: 400px;
   height: 30px;
   border-radius: 11px;
 }
@@ -99,6 +99,7 @@ input {
   text-align: center;
   background-color: #c4e4c0;
   margin-top: 20px;
+  height: 310px;
 }
 
 .ingredient_card {
@@ -169,7 +170,7 @@ th {
 }
 
 table {
-  width: 500px;
+  width: 600px;
 }
 
 textarea {

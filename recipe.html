@@ -1,6 +1,5 @@
-<!DOCTYPE html>
-
-<html>
+<!doctype html>
+<html lang="en">
 
 <head>
   <title>Fridge Tracker Site</title>
@@ -8,18 +7,10 @@
 </head>
 
 <body>
-
   <div class="topnav">
-    <a href="index.html">Recipes</a>
-    <a class="active" href="pantry.html">Pantry</a>
+    <a class="active" href="index.html">Recipes</a>
+    <a href="pantry.html">Pantry</a>
     <a href="login.html" onclick="logout()" style="float:right;">Logout</a>
-  </div>
-  <button id="add_pantry_item_button" type="button" onclick="addPantryItemButton('add_pantry_item_button')">Add Pantry
-    Item</button>
-  <div class="search-container">
-    <form role="search" id="search-container" style="width:200px;height:30px;">
-      <input type="search" id="query" name="q" placeholder="Search.." style="width:100%;height:100%;margin-top:0px;">
-    </form>
   </div>
 
   <section id="section">
@@ -31,7 +22,7 @@
   </section>
 
 </body>
-<script type="module" src="./resources/pantry.js"></script>
+<script type="module" src="./resources/recipe.js"></script>
 <script type="module" src="./resources/login.js"></script>
 
 </html>

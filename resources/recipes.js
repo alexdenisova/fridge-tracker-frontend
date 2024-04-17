@@ -1,6 +1,8 @@
 import "./recipes/add.js";
+import { main } from "./recipes/constants.js";
 import "./recipes/filter.js";
 import { showRecipes } from "./recipes/list.js";
+import "./recipes/show.js";
 import "./utils.js";
 
 const search_container = document.getElementById("search-container");

@@ -52,3 +52,14 @@ export function redirectToLogin() {
     <a href="/login" style="text-decoration:none;color:black;">Please <span style="color:blue;text-decoration:underline;">login</span>.</a>`;
   document.getElementById('message_parent').style.display = "inline";
 }
+
+export function responseIsOk(response) {
+  if (!response.ok) {
+    if (response.status == 401) {
+      redirectToLogin();
+      return false;
+    }
+    return false;
+  }
+  return true;
+}

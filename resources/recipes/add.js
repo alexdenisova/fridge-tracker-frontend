@@ -4,22 +4,21 @@ import { getParseRecipeLink } from "../backend/parse_recipe_link.js";
 import { postRecipeIngredient } from "../backend/recipe_ingredients.js";
 import { postRecipe } from "../backend/recipes.js";
 import { clickButton, hideElement, redirectToLogin, showElement, showMessage } from "../utils.js";
-import { RECIPES_ID, main } from "./constants.js";
+import { INGREDIENT_TABLE_ID, LIST_ID, main } from "./constants.js";
 import { unpressFilterButton } from "./filter.js";
 
-import { v4 as uuidv4 } from 'uuid';
+import { createTable } from "./ingredient_table.js";
 
 const ADD_RECIPE_BUTTON_ID = "add_recipe_button";
 const ADD_RECIPE_ID = "add_recipes_form";
-const PARSED_INGREDIENT_TABLE_ID = "parsed_ingredient_table";
 const PARSED_INGREDIENTS_BUTTON_ID = "parse_ingredients_button";
 
 window.addRecipeButton = function (add_id) {
   if (clickButton(add_id) == "unpressed") {
     hideElement(ADD_RECIPE_ID);
-    showElement(RECIPES_ID);
+    showElement(LIST_ID);
   } else {
-    hideElement(RECIPES_ID);
+    hideElement(LIST_ID);
     unpressFilterButton();
     if (document.getElementById(ADD_RECIPE_ID) == null) {
       addForm();
@@ -88,11 +87,11 @@ window.submitRecipe = async function () {
 
 // TODO: return list of failed creations
 async function postRecipeIngredients(recipe_id) {
-  const table = document.getElementById(PARSED_INGREDIENT_TABLE_ID);
+  const table = document.getElementById(INGREDIENT_TABLE_ID);
 
   let all_ingredients_added = true;
-  for (var i = 0; i < table.childElementCount - 1; i++) {
-    const tr_id = table.children[i + 1].id;
+  for (var i = 0; i < table.children[1].childElementCount - 1; i++) {
+    const tr_id = table.children[1].children[i].id;
     let amount = document.getElementById(tr_id + "-0").value;
     let unit = document.getElementById(tr_id + "-1").value;
     let name = document.getElementById(tr_id + "-2").value;
@@ -111,7 +110,6 @@ async function postRecipeIngredients(recipe_id) {
 }
 
 window.parseLink = function (link_id, button_id) {
-  console.log("button id: " + button_id);
   clickButton(button_id)
   getParseRecipeLink(document.getElementById(link_id).value)
     .then(async function (response) {
@@ -130,7 +128,8 @@ window.parseLink = function (link_id, button_id) {
       document.getElementById('instructions').value = data.instructions;
       document.getElementById('image').value = data.image;
       createIngredientsTable(data.ingredients);
-      clickButton(button_id)
+      clickButton(button_id);
+      return false;
     })
 }
 
@@ -153,49 +152,11 @@ window.parseIngredients = function (input_id, button_id) {
 }
 
 function createIngredientsTable(parsed_ingredients) {
-  const old_table = document.getElementById(PARSED_INGREDIENT_TABLE_ID);
+  const old_table = document.getElementById(INGREDIENT_TABLE_ID);
   if (old_table != null) {
     old_table.parentElement.removeChild(old_table);
   }
 
-  const table = document.createElement('table');
-  table.setAttribute("id", PARSED_INGREDIENT_TABLE_ID);
-  table.innerHTML = `
-      <tr>
-        <th>Amount</th>
-        <th>Unit</th>
-        <th>Ingredient</th>
-        <th>Optional</th>
-      </tr>`;
-  const add_ingredient_button = document.createElement('button');
-  add_ingredient_button.setAttribute("id", "add_ingredient_button");
-  add_ingredient_button.setAttribute("type", "button");
-  add_ingredient_button.innerHTML = `Add Ingredient`;
-  add_ingredient_button.setAttribute("onclick", `addIngredientRow()`);
-
   const button = document.getElementById(PARSED_INGREDIENTS_BUTTON_ID);
-  button.parentNode.insertBefore(add_ingredient_button, button.nextSibling);
-  button.parentNode.insertBefore(table, button.nextSibling);
-  parsed_ingredients.forEach(ingredient => {
-    addIngredientRow(ingredient.amount, ingredient.unit, ingredient.name);
-  });
-}
-
-window.addIngredientRow = addIngredientRow;
-
-function addIngredientRow(amount = "", unit = "", name = "") {
-  console.log(amount + unit + name);
-  const table = document.getElementById(PARSED_INGREDIENT_TABLE_ID);
-  const tr = document.createElement('tr');
-  const tr_id = uuidv4();
-  tr.setAttribute("id", tr_id);
-  tr.innerHTML = `
-      <td><input type="text" id="${tr_id}-0" value="${amount}"></td>
-      <td><input type="text" id="${tr_id}-1" value="${unit}"></td>
-      <td><input type="text" id="${tr_id}-2" value="${name}"></td>
-      <td><input type="checkbox" id="${tr_id}-3"></td>
-      <td><img src="http://findicons.com/files/icons/1715/gion/24/dialog_cancel.png"
-      onclick='removeElement("${tr_id}")'></td>`;
-  table.appendChild(tr);
-  return false;
+  button.insertAdjacentHTML('afterend', createTable(parsed_ingredients));
 }

@@ -1,7 +1,7 @@
 import { listRecipes } from "../backend/recipes.js";
 import { CARDS_CLASS } from "../constants.js";
 import { redirectToLogin, showMessage } from "../utils.js";
-import { RECIPES_ID, main } from "./constants.js";
+import { LIST_ID, main } from "./constants.js";
 
 export function showRecipes(query_params = null) {
   listRecipes(query_params)
@@ -16,7 +16,7 @@ export function showRecipes(query_params = null) {
       }
       const data = await response.json();
       const recipes = document.createElement('div');
-      recipes.setAttribute("id", RECIPES_ID);
+      recipes.setAttribute("id", LIST_ID);
       recipes.setAttribute("class", CARDS_CLASS);
       data.items.forEach(recipe => {
         const div_card = document.createElement('div');
@@ -27,6 +27,7 @@ export function showRecipes(query_params = null) {
                 <a href="${recipe.link}"><center><img src="${recipe.image}" class="thumbnail"></center></a>
                 <p><a class="title" href="${recipe.link}">${recipe.name}</a></p>
                 <p class="detail">Cooking time: ${recipe.cooking_time_mins} mins</p>
+                <p class="detail"><a href="recipe.html?id=${recipe.id}" style="color:#143273">Details</a></p>
               </div>
             </div>
           </div>
