@@ -30,4 +30,4 @@ jobs:
         with:
           name: build
           path: dist
-      - run: docker build -t fridge-tracker-frontend:$(date +%s)
+      - run: docker build -t fridge-tracker-frontend:$(date +%s) .
