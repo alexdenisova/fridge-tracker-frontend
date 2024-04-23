@@ -1,1 +1,1 @@
-# fridge-tracker-frontend
+# pantry-tracker-frontend

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Fridge Tracker Site</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <section id="section">
+    <form onsubmit="login('username', 'password'); return false;">
+      <label for="username">username:</label>
+      <input type="text" id="username" name="username"><br>
+      <label for="password">password:</label>
+      <input type="text" id="password" name="password"><br>
+      <input type="submit" value="Login" onclick="clickSubmit('Login');" style="width:50%;height:100%;">
+      <input type="submit" value="Create Account" onclick="clickSubmit('Create');" style="width:50%;height:100%;">
+    </form>
+    <div id='message_parent' class="message_parent">
+      <div id='message' class="message"></div>
+      <img class="message_close" src="http://findicons.com/files/icons/1715/gion/24/dialog_cancel.png"
+        onclick='document.getElementById("message_parent").style.display = "none";'>
+    </div>
+  </section>
+
+</body>
+<script type="module" src="./resources/login.js"></script>
+
+</html>
