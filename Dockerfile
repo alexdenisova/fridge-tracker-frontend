@@ -13,7 +13,7 @@ RUN \
   addgroup --gid "${GID}" "${USER}" \
   ; adduser --disabled-password --gecos "" --home "${HOME}" --ingroup "${USER}" --uid "${UID}" "${USER}"
 
-ENV PORT="8080"
+ENV PORT="5137"
 ENV DIRECTORY="${HOME}/public"
 ENV SPA_MODE="true"
 ENV CACHE="true"
