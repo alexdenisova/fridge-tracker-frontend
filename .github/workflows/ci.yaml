@@ -21,7 +21,8 @@ jobs:
           cache: "npm"
       - run: npm ci
       - run: npm run build
-      - uses: actions/upload-artifact@master
+      - name: Upload build artifact
+        uses: actions/upload-artifact@master
         with:
           name: build
           path: dist
@@ -31,7 +32,8 @@ jobs:
     # if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/download-artifact@master
+      - name: Download build artifact
+        uses: actions/download-artifact@master
         with:
           name: build
           path: dist
@@ -54,7 +56,7 @@ jobs:
           "${REGISTRY}/${GITHUB_REPOSITORY}" \
           "$TAG" \
           > "${{ github.event.repository.name }}.values.yaml"
-      - name: Upload Image Artifact
+      - name: Upload image artifact
         uses: actions/upload-artifact@master
         with:
           name: image-tag
@@ -69,7 +71,8 @@ jobs:
         with:
           repository: alexdenisova/deployment
           token: ${{ secrets.PACKAGES_TOKEN }}
-      - uses: actions/download-artifact@master
+      - name: Download image artifact
+        uses: actions/download-artifact@master
         with:
           name: image-tag
           path: .
@@ -78,5 +81,6 @@ jobs:
         run: |
           git config --global user.name 'Action Push'
           git config --global user.email 'alexadenisova@gmail.com'
-          git commit -am "New ${{ github.event.repository.name }} version"
+          git add -A
+          git commit -m "New ${{ github.event.repository.name }} version"
           git push
