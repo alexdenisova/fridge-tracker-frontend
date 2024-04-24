@@ -49,7 +49,7 @@ export function getOrNull(object, key) {
 
 export function redirectToLogin() {
   document.getElementById('message').innerHTML = `
-    <a href="/login" style="text-decoration:none;color:black;">Please <span style="color:blue;text-decoration:underline;">login</span>.</a>`;
+    <a href="login.html" style="text-decoration:none;color:black;">Please <span style="color:blue;text-decoration:underline;">login</span>.</a>`;
   document.getElementById('message_parent').style.display = "inline";
 }
 
