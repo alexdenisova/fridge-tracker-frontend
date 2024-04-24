@@ -74,3 +74,9 @@ jobs:
           name: image-tag
           path: .
       - run: cat "${{ github.event.repository.name }}.values.yaml"
+      - name: Commit report
+        run: |
+          git config --global user.name 'Action Push'
+          git config --global user.email 'alexadenisova@gmail.com'
+          git commit -am "New ${{ github.event.repository.name }} version"
+          git push
