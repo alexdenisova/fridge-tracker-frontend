@@ -125,7 +125,7 @@ jobs:
           git push
   clean-image-tags:
     runs-on: ubuntu-latest
-    # needs: publish-image
+    needs: publish-image
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/clean_image_tags
