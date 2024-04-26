@@ -55,8 +55,9 @@ runs:
         else
           echo "New release matches package version. No commit needed"
         fi
-        printf 'release_version=%s' "$release_version" >> $GITHUB_OUTPUT
-        printf 'needs_commit=%s' "$needs_commit" >> $GITHUB_OUTPUT
+        printf 'release_version=%s\n' "$release_version" >> $GITHUB_OUTPUT
+        printf 'needs_commit=%s\n' "$needs_commit" >> $GITHUB_OUTPUT
+        cat $GITHUB_OUTPUT
     - uses: actions/checkout@v4
       if: ${{ steps.compute.outputs.needs_commit }} == 'true'
       with:
