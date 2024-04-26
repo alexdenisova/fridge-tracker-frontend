@@ -25,6 +25,7 @@ jobs:
     needs: update-version
     if: ${{ needs.update-version.outputs.stop_workflow }} != 'true'
     steps:
+      - run: echo ${{ needs.update-version.outputs.stop_workflow }}
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
@@ -37,88 +38,88 @@ jobs:
         with:
           name: build
           path: dist
-  create-tag:
-    runs-on: ubuntu-latest
-    needs:
-      - update-version
-      - build
-    if: >-
-      ${{ needs.update-version.outputs.stop_workflow }} != 'true'
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.PERSONAL_TOKEN }}
-      - run: |
-          git tag ${{ needs.update-version.outputs.release_version }}
-          git push origin tag ${{ needs.update-version.outputs.release_version }}
-  publish-image:
-    runs-on: ubuntu-latest
-    needs:
-      - update-version
-      - build
-    if: >-
-      ${{ needs.update-version.outputs.stop_workflow }} != 'true'
-      && github.ref == "${{ needs.update-version.outputs.release_version }}"
-    env:
-      REGISTRY: ghcr.io
-    permissions:
-      packages: write
-    steps:
-      - uses: actions/checkout@v4
-      - name: Download build artifact
-        uses: actions/download-artifact@master
-        with:
-          name: build
-          path: dist
-      - name: Log in to the Container registry
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build Package
-        run: docker build -t ${{ github.event.repository.name }} .
-      - name: Publish Package
-        run: |-
-          TAG="$(cat package.json | jq -r '.version')"
-          docker tag ${{ github.event.repository.name }} ${REGISTRY}/${GITHUB_REPOSITORY}:${TAG}
-          docker push ${REGISTRY}/${GITHUB_REPOSITORY}:${TAG}
+  # create-tag:
+  #   runs-on: ubuntu-latest
+  #   needs:
+  #     - update-version
+  #     - build
+  #   if: >-
+  #     ${{ needs.update-version.outputs.stop_workflow }} != 'true'
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         token: ${{ secrets.PERSONAL_TOKEN }}
+  #     - run: |
+  #         git tag ${{ needs.update-version.outputs.release_version }}
+  #         git push origin tag ${{ needs.update-version.outputs.release_version }}
+  # publish-image:
+  #   runs-on: ubuntu-latest
+  #   needs:
+  #     - update-version
+  #     - build
+  #   if: >-
+  #     ${{ needs.update-version.outputs.stop_workflow }} != 'true'
+  #     && github.ref == "${{ needs.update-version.outputs.release_version }}"
+  #   env:
+  #     REGISTRY: ghcr.io
+  #   permissions:
+  #     packages: write
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Download build artifact
+  #       uses: actions/download-artifact@master
+  #       with:
+  #         name: build
+  #         path: dist
+  #     - name: Log in to the Container registry
+  #       uses: docker/login-action@v3
+  #       with:
+  #         registry: ${{ env.REGISTRY }}
+  #         username: ${{ github.actor }}
+  #         password: ${{ secrets.GITHUB_TOKEN }}
+  #     - name: Build Package
+  #       run: docker build -t ${{ github.event.repository.name }} .
+  #     - name: Publish Package
+  #       run: |-
+  #         TAG="$(cat package.json | jq -r '.version')"
+  #         docker tag ${{ github.event.repository.name }} ${REGISTRY}/${GITHUB_REPOSITORY}:${TAG}
+  #         docker push ${REGISTRY}/${GITHUB_REPOSITORY}:${TAG}
 
-          printf '%s:\n  image:\n    repository: %s\n    tag: %s\n' \
-          $(echo "${{ github.event.repository.name }}" | sed -E 's/-([a-z])/\U\1/g') \
-          "${REGISTRY}/${GITHUB_REPOSITORY}" \
-          "$TAG" \
-          > "${{ github.event.repository.name }}.values.yaml"
-      - name: Upload image artifact
-        uses: actions/upload-artifact@master
-        with:
-          name: image-tag
-          path: "${{ github.event.repository.name }}.values.yaml"
-  push-values:
-    runs-on: ubuntu-latest
-    needs:
-      - update-version
-      - publish-image
-    if: >-
-      ${{ needs.update-version.outputs.stop_workflow }} != 'true'
-      && github.ref == "${{ needs.update-version.outputs.release_version }}"
-    env:
-      VALUES_DIR: "values/pantry-tracker"
-    steps:
-      - name: Checkout into deployment
-        uses: actions/checkout@v4
-        with:
-          repository: alexdenisova/deployment
-          token: ${{ secrets.PERSONAL_TOKEN }}
-      - name: Download image artifact
-        uses: actions/download-artifact@master
-        with:
-          name: image-tag
-          path: ${{ env.VALUES_DIR }}
-      - name: Commit report
-        run: |
-          git config --global user.name 'Action Push'
-          git config --global user.email 'alexadenisova@gmail.com'
-          git add -A
-          git commit -m "New ${{ github.event.repository.name }} version"
-          git push
+  #         printf '%s:\n  image:\n    repository: %s\n    tag: %s\n' \
+  #         $(echo "${{ github.event.repository.name }}" | sed -E 's/-([a-z])/\U\1/g') \
+  #         "${REGISTRY}/${GITHUB_REPOSITORY}" \
+  #         "$TAG" \
+  #         > "${{ github.event.repository.name }}.values.yaml"
+  #     - name: Upload image artifact
+  #       uses: actions/upload-artifact@master
+  #       with:
+  #         name: image-tag
+  #         path: "${{ github.event.repository.name }}.values.yaml"
+  # push-values:
+  #   runs-on: ubuntu-latest
+  #   needs:
+  #     - update-version
+  #     - publish-image
+  #   if: >-
+  #     ${{ needs.update-version.outputs.stop_workflow }} != 'true'
+  #     && github.ref == "${{ needs.update-version.outputs.release_version }}"
+  #   env:
+  #     VALUES_DIR: "values/pantry-tracker"
+  #   steps:
+  #     - name: Checkout into deployment
+  #       uses: actions/checkout@v4
+  #       with:
+  #         repository: alexdenisova/deployment
+  #         token: ${{ secrets.PERSONAL_TOKEN }}
+  #     - name: Download image artifact
+  #       uses: actions/download-artifact@master
+  #       with:
+  #         name: image-tag
+  #         path: ${{ env.VALUES_DIR }}
+  #     - name: Commit report
+  #       run: |
+  #         git config --global user.name 'Action Push'
+  #         git config --global user.email 'alexadenisova@gmail.com'
+  #         git add -A
+  #         git commit -m "New ${{ github.event.repository.name }} version"
+  #         git push
