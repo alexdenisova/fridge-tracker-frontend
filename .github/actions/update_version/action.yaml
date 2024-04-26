@@ -39,10 +39,11 @@ runs:
             needs_commit=true
             tag_prefix="$(date '+%y.%-m.')"
             echo updating tag "$current" "$tag_prefix" "$tag"
-            if [[ "$current" == 24.4.* ]]; then
+            if [[ "$current" == "$tag_prefix"* ]]; then
               echo inside
               old_inc=${str#*.*.}
               new_inc=$(($old_inc + 1))
+              echo $new_inc $old_inc
               if [[ "$old_inc" != "0" ]] && [[ "$new_inc" == "1" ]]; then
                 new_inc="0"
               fi
