@@ -1,7 +1,8 @@
 ARG SPA_TO_HTTP_VERSION="1.0.6"
 
-
 FROM devforth/spa-to-http:${SPA_TO_HTTP_VERSION} AS base
+
+LABEL org.opencontainers.image.source = "https://github.com/alexdenisova/pantry-tracker-frontend"
 
 SHELL [ "/bin/sh", "-eu", "-c" ]
 
