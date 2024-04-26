@@ -81,4 +81,3 @@ runs:
         git add -A
         git commit -m "New package version - ${{ steps.compute.outputs.release_version }}"
         git push
-        echo "Commited new version"
