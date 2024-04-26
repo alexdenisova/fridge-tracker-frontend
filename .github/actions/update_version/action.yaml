@@ -70,13 +70,13 @@ runs:
       run: |
         echo needs commit: ${{ steps.compute.outputs.needs_commit }}
         echo new version: $NEW_VERSION
-        tmp=$(mktemp)
-        jq ".version = \"$NEW_VERSION\"" package.json > "$tmp"
-        mv "$tmp" package.json
+        # tmp=$(mktemp)
+        # jq ".version = \"$NEW_VERSION\"" package.json > "$tmp"
+        # mv "$tmp" package.json
 
-        git config --global user.name 'Version Update'
-        git config --global user.email 'alexadenisova@gmail.com'
-        git add -A
-        git commit -m "Updated package version"
-        git push
-        echo "Commited new version"
+        # git config --global user.name 'Version Update'
+        # git config --global user.email 'alexadenisova@gmail.com'
+        # git add -A
+        # git commit -m "Updated package version"
+        # git push
+        # echo "Commited new version"
