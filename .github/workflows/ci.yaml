@@ -14,6 +14,7 @@ jobs:
       stop_workflow: ${{ steps.update_version.outputs.stop_workflow }}
       release_version: ${{ steps.update_version.outputs.release_version }}
     steps:
+      - uses: actions/checkout@v4
       - uses: ./.github/actions/update_version
         id: update_version
         with:
@@ -44,6 +45,7 @@ jobs:
     if: >-
       ${{ needs.update-version.outputs.stop_workflow }} != 'true'
     steps:
+      - uses: actions/checkout@v3
       - run: |
           git tag ${{ needs.update-version.outputs.release_version }}
           git push origin tag ${{ needs.update-version.outputs.release_version }}
