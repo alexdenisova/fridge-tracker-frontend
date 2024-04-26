@@ -38,8 +38,8 @@ runs:
           if [[ "$tag" == "$current" ]]; then
             needs_commit=true
             tag_prefix="$(date '+%y.%-m.')"
+            echo updating tag "$current" "$tag_prefix" "$tag"
             if [[ "$current" == "$tag_prefix"* ]]; then
-              echo updating tag "$current" "$tag_prefix" "$tag"
               old_inc=${str#*.*.}
               new_inc=$(($old_inc + 1))
               if [[ "$old_inc" != "0" ]] && [[ "$new_inc" == "1" ]]; then
