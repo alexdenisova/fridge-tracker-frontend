@@ -2,7 +2,7 @@ name: Node.js CI
 
 on:
   push:
-    tags: ['*.*.*']
+    tags: ["*.*.*"]
     branches: [main]
   pull_request:
     branches: [main]
@@ -130,6 +130,6 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/clean_image_tags
         with:
-          package-name: ${{ github.event.repository.name }}
+          package_name: ${{ github.event.repository.name }}
           token: ${{ secrets.PERSONAL_TOKEN }}
           leave: 2
