@@ -59,25 +59,20 @@ runs:
         printf 'release_version=%s\n' "$release_version" >> $GITHUB_OUTPUT
         printf 'needs_commit=%s\n' "$needs_commit" >> $GITHUB_OUTPUT
     - uses: actions/checkout@v4
-      if: ${{ steps.compute.outputs.needs_commit }} == 'true'
+      if: steps.compute.outputs.needs_commit == 'true'
       with:
         token: ${{ inputs.token }}
     - name: Commit Version
       shell: bash
-      if: ${{ steps.compute.outputs.needs_commit }} == 'true'
-      env:
-        NEW_VERSION: ${{ steps.compute.outputs.release_version }}
+      if: steps.compute.outputs.needs_commit == 'true'
       run: |
-        echo needs commit: ${{ steps.compute.outputs.needs_commit }}
-        echo new version: $NEW_VERSION
+        tmp=$(mktemp)
+        jq ".version = \"$${{ steps.compute.outputs.release_version }}\"" package.json > "$tmp"
+        mv "$tmp" package.json
 
-        # tmp=$(mktemp)
-        # jq ".version = \"$NEW_VERSION\"" package.json > "$tmp"
-        # mv "$tmp" package.json
-
-        # git config --global user.name 'Version Update'
-        # git config --global user.email 'alexadenisova@gmail.com'
-        # git add -A
-        # git commit -m "Updated package version"
-        # git push
-        # echo "Commited new version"
+        git config --global user.name 'Version Update'
+        git config --global user.email 'alexadenisova@gmail.com'
+        git add -A
+        git commit -m "Updated package version"
+        git push
+        echo "Commited new version"
