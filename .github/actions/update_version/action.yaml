@@ -38,12 +38,9 @@ runs:
           if [[ "$tag" == "$current" ]]; then
             needs_commit=true
             tag_prefix="$(date '+%y.%-m.')"
-            echo updating tag "$current" "$tag_prefix" "$tag"
             if [[ "$current" == "$tag_prefix"* ]]; then
-              echo inside
               old_inc=${current#*.*.}
               new_inc=$(($old_inc + 1))
-              echo new $new_inc old $old_inc
               if [[ "$old_inc" != "0" ]] && [[ "$new_inc" == "1" ]]; then
                 new_inc="0"
               fi
@@ -61,7 +58,6 @@ runs:
         fi
         printf 'release_version=%s\n' "$release_version" >> $GITHUB_OUTPUT
         printf 'needs_commit=%s\n' "$needs_commit" >> $GITHUB_OUTPUT
-        cat $GITHUB_OUTPUT
     - uses: actions/checkout@v4
       if: ${{ steps.compute.outputs.needs_commit }} == 'true'
       with:
