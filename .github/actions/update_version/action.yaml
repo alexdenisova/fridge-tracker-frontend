@@ -39,6 +39,7 @@ runs:
             needs_commit=true
             tag_prefix="$(date '+%y.%-m.')"
             if [[ "$current" == "$tag_prefix"* ]]; then
+              echo updating tag "$current" "$tag_prefix" "$tag"
               old_inc=${str#*.*.}
               new_inc=$(($old_inc + 1))
               if [[ "$old_inc" != "0" ]] && [[ "$new_inc" == "1" ]]; then
@@ -71,7 +72,7 @@ runs:
       run: |
         echo needs commit: ${{ steps.compute.outputs.needs_commit }}
         echo new version: $NEW_VERSION
-        
+
         # tmp=$(mktemp)
         # jq ".version = \"$NEW_VERSION\"" package.json > "$tmp"
         # mv "$tmp" package.json
