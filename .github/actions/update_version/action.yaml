@@ -71,6 +71,7 @@ runs:
       run: |
         echo needs commit: ${{ steps.compute.outputs.needs_commit }}
         echo new version: $NEW_VERSION
+        
         # tmp=$(mktemp)
         # jq ".version = \"$NEW_VERSION\"" package.json > "$tmp"
         # mv "$tmp" package.json
