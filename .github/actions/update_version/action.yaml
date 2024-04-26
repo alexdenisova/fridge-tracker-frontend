@@ -1,5 +1,9 @@
 name: Update Project Version
-description: Updates and commits the project version.
+description: |-
+  Updates and commits the project version.
+  Version is calculated with calver: MAJOR.MINOR.INCREMENT
+  where: MAJOR = year, MINOR = month
+
 
 inputs:
   token:
