@@ -42,7 +42,9 @@ jobs:
     needs:
       - update-version
       - build
-    if: needs.update-version.outputs.stop_workflow != 'true'
+    if: >-
+      needs.update-version.outputs.stop_workflow != 'true'
+      && startsWith(github.ref, 'refs/tags/') != true
     steps:
       - uses: actions/checkout@v3
         with:
@@ -57,7 +59,7 @@ jobs:
       - build
     if: >-
       needs.update-version.outputs.stop_workflow != 'true'
-      && github.ref == "${{ needs.update-version.outputs.release_version }}"
+      && startsWith(github.ref, 'refs/tags/')
     env:
       REGISTRY: ghcr.io
     permissions:
@@ -100,7 +102,7 @@ jobs:
       - publish-image
     if: >-
       needs.update-version.outputs.stop_workflow != 'true'
-      && github.ref == "${{ needs.update-version.outputs.release_version }}"
+      && startsWith(github.ref, 'refs/tags/')
     env:
       VALUES_DIR: "values/pantry-tracker"
     steps:
