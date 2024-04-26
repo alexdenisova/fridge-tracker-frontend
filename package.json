@@ -1,7 +1,7 @@
 {
   "name": "pantry-tracker-frontend",
   "private": true,
-  "version": "24.4.0needs_commit=trueneeds_commit=falseneeds_commit=falseneeds_commit=falseneeds_commit=falseneeds_commit=falseneeds_commit=falseneeds_commit=falseneeds_commit=falseneeds_commit=falseneeds_commit=falseneeds_commit=falseneeds_commit=falseneeds_commit=falseneeds_commit=falseneeds_commit=falseneeds_commit=falseneeds_commit=falseneeds_commit=false",
+  "version": "24.4.0needs_commit=trueneeds_commit=falseneeds_commit=falseneeds_commit=falseneeds_commit=falseneeds_commit=falseneeds_commit=falseneeds_commit=falseneeds_commit=falseneeds_commit=falseneeds_commit=falseneeds_commit=falseneeds_commit=falseneeds_commit=falseneeds_commit=falseneeds_commit=falseneeds_commit=falseneeds_commit=falseneeds_commit=falseneeds_commit=false",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
