@@ -33,19 +33,20 @@ runs:
         current="$(cat package.json | jq -r '.version')"
         release_version="$current"
         needs_commit=false
+
         for tag in "${tags[@]}"; do
           if [[ "$tag" == "$current" ]]; then
             needs_commit=true
-            prefix="$(date '+%y.%-m.')"
-            if [[ "$current" == "$prefix"* ]]; then
+            tag_prefix="$(date '+%y.%-m.')"
+            if [[ "$current" == "$tag_prefix"* ]]; then
               old_inc=${str#*.*.}
               new_inc=$(($old_inc + 1))
               if [[ "$old_inc" != "0" ]] && [[ "$new_inc" == "1" ]]; then
                 new_inc="0"
               fi
-              release_version="$(printf '%s%s' "$prefix" "$new_inc")"
+              release_version="$(printf '%s%s' "$tag_prefix" "$new_inc")"
             else
-              release_version="$(printf '%s0' "$prefix")"
+              release_version="$(printf '%s0' "$tag_prefix")"
             fi
           fi
         done
