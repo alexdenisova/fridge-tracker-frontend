@@ -14,7 +14,6 @@ jobs:
       stop_workflow: ${{ steps.update_version.outputs.stop_workflow }}
       release_version: ${{ steps.update_version.outputs.release_version }}
     steps:
-      - uses: actions/checkout@v4
       - uses: ./.github/actions/update_version
         id: update_version
         with:
@@ -123,3 +122,11 @@ jobs:
           git add -A
           git commit -m "New ${{ github.event.repository.name }} version"
           git push
+  clean-image-tags:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./.github/actions/clean_image_tags
+        with:
+          package-name: ${{ github.event.repository.name }}
+          token: ${{ secrets.PERSONAL_TOKEN }}
+          leave: 2
