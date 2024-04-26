@@ -59,10 +59,11 @@ runs:
         printf 'needs_commit=%s' "$needs_commit" >> $GITHUB_OUTPUT
     - name: Commit Version
       shell: bash
-      if: steps.compute.outputs.needs_commit == 'true'
+      # if: steps.compute.outputs.needs_commit == 'true'
       env:
         NEW_VERSION: ${{ steps.compute.outputs.release_version }}
       run: |
+        echo needs commit: ${{ steps.compute.outputs.needs_commit }}
         echo new version: $NEW_VERSION
         tmp=$(mktemp)
         jq ".version = \"$NEW_VERSION\"" package.json > "$tmp"
@@ -73,3 +74,4 @@ runs:
         git add -A
         git commit -m "Updated package version"
         git push
+        echo "Commited new version"

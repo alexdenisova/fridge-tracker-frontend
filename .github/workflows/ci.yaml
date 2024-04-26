@@ -46,6 +46,8 @@ jobs:
       ${{ needs.update-version.outputs.stop_workflow }} != 'true'
     steps:
       - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.PERSONAL_TOKEN }}
       - run: |
           git tag ${{ needs.update-version.outputs.release_version }}
           git push origin tag ${{ needs.update-version.outputs.release_version }}
