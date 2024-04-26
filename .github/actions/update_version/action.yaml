@@ -57,9 +57,13 @@ runs:
         fi
         printf 'release_version=%s' "$release_version" >> $GITHUB_OUTPUT
         printf 'needs_commit=%s' "$needs_commit" >> $GITHUB_OUTPUT
+    - uses: actions/checkout@v4
+      if: ${{ steps.compute.outputs.needs_commit }} == 'true'
+      with:
+        token: ${{ inputs.token }}
     - name: Commit Version
       shell: bash
-      # if: steps.compute.outputs.needs_commit == 'true'
+      if: ${{ steps.compute.outputs.needs_commit }} == 'true'
       env:
         NEW_VERSION: ${{ steps.compute.outputs.release_version }}
       run: |
