@@ -71,8 +71,9 @@ runs:
       shell: bash
       if: steps.compute.outputs.needs_commit == 'true'
       run: |
+        echo new version : ${{ steps.compute.outputs.release_version }}
         tmp=$(mktemp)
-        jq ".version = \"$${{ steps.compute.outputs.release_version }}\"" package.json > "$tmp"
+        jq ".version = \"${{ steps.compute.outputs.release_version }}\"" package.json > "$tmp"
         mv "$tmp" package.json
 
         git config --global user.name 'Version Update'
