@@ -68,7 +68,6 @@ runs:
       shell: bash
       if: steps.compute.outputs.needs_commit == 'true'
       run: |
-        echo new version : ${{ steps.compute.outputs.release_version }}
         tmp=$(mktemp)
         jq ".version = \"${{ steps.compute.outputs.release_version }}\"" package.json > "$tmp"
         mv "$tmp" package.json
@@ -76,6 +75,6 @@ runs:
         git config --global user.name 'Version Update'
         git config --global user.email 'alexadenisova@gmail.com'
         git add -A
-        git commit -m "Updated package version"
+        git commit -m "New package version - ${{ steps.compute.outputs.release_version }}"
         git push
         echo "Commited new version"
