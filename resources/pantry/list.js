@@ -35,8 +35,10 @@ export function showPantryItems(query_params = null) {
         }
         let expires = expirationDate(item.expiration_date);
         let color = "";
+        let running_low = false;
         if (!isNaN(amount) && !isNaN(item.running_low) && Number(amount) <= Number(item.running_low)) {
-          color = 'style="background-color:	#ffce0b;"';
+          running_low = true;
+          color = 'style="background-color:	#ffce0b;padding-left: 4px;"';
         }
         if (item.expiration_date != null) {
           const days_left = daysLeft(item.expiration_date);
@@ -53,7 +55,7 @@ export function showPantryItems(query_params = null) {
               <a href="pantry_item.html?id=${item.id}" style="text-decoration:none;color:black;">
                 <div class="ingredient_card" id="${item.id}" ${color}>
                   <p class="title">${ingredient_name}</p>
-                  <p class="detail">${amount}${unit}</p>
+                  <p class="detail">${amount}${unit}${running_low ? " - RUNNING LOW" : ""}</p>
                   <p class="detail">Expires: ${expires}</p>
                 </div>
               </a>
