@@ -1,6 +1,6 @@
 import { makeIngredientIfNotExists } from "../backend/ingredients.js";
 import { postPantryItem } from "../backend/pantry_items.js";
-import { clickButton, getOrNull, hideElement, showElement, showMessage } from "../utils.js";
+import { clickButton, getOrNull, hideElement, showElement, showMessage, showMessageThenRedirect } from "../utils.js";
 import { LIST_ID, main } from "./constants.js";
 import { transformAmount, unitOptions } from "./utils.js";
 
@@ -65,16 +65,12 @@ window.submitPantryItem = async function () {
 
   const response = await postPantryItem(map);
   if (response.ok) {
-    const result = await response.json();
-    console.log("Created pantry item with id {}", result.id);
-    window.location.href = "pantry.html";
-    return false;
+    showMessageThenRedirect("Pantry item added successfully!", true, "pantry.html");
   } else {
     if (response.status == 401) {
       redirectToLogin();
-      return false;
     }
     showMessage("Failed to create pantry item!", false);
-    return false;
   }
+  return false;
 }

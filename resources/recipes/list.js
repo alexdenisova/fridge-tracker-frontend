@@ -37,4 +37,3 @@ export function showRecipes(query_params = null) {
       main.appendChild(recipes);
     });
 }
-

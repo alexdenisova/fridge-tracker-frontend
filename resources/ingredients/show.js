@@ -1,5 +1,5 @@
 import { deleteIngredient, getIngredient, patchIngredient } from "../backend/ingredients.js";
-import { showMessage } from "../utils.js";
+import { showMessage, showMessageThenRedirect } from "../utils.js";
 import { main } from "./constants.js";
 
 const CHANGE_ID = "change_ingredient";
@@ -13,7 +13,7 @@ export function showIngredient(item_id) {
         redirectToLogin();
         return false;
       }
-      showMessage("Could not get ingredient.", false);
+      showMessageThenRedirect("Could not get ingredient.", false, "ingredients.html");
       return false;
     }
     const form = document.createElement('form');
@@ -40,15 +40,12 @@ window.removeIngredient = async function (item_id) {
   if (!response.ok) {
     if (response.status == 401) {
       redirectToLogin();
-      return false;
     }
     showMessage("Failed to delete ingredient!", false);
-    return false;
   } else {
-    console.log("Deleted ingredient with id {}", item_id);
-    window.location.href = "ingredients.html";
-    return false;
+    showMessageThenRedirect("Successfully deleted ingredient.", true, "ingredients.html");
   }
+  return false;
 }
 
 window.saveIngredient = async function (item_id) {
@@ -58,12 +55,10 @@ window.saveIngredient = async function (item_id) {
   if (!response.ok) {
     if (response.status == 401) {
       redirectToLogin();
-      return false;
     }
     showMessage("Failed to save ingredient!", false);
-    return false;
   } else {
     showMessage("Ingredient saved successfully!", true);
-    return false;
   }
+  return false;
 }

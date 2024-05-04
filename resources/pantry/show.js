@@ -1,6 +1,6 @@
 import { getIngredient, makeIngredientIfNotExists } from "../backend/ingredients.js";
 import { deletePantryItem, getPantryItem, putPantryItem } from "../backend/pantry_items.js";
-import { getOrNull, showMessage } from "../utils.js";
+import { getOrNull, showMessage, showMessageThenRedirect } from "../utils.js";
 import { main } from "./constants.js";
 import { transformAmount, unitOptions } from "./utils.js";
 
@@ -15,7 +15,7 @@ export function showPantryItem(item_id) {
         redirectToLogin();
         return false;
       }
-      showMessage("Could not get pantry item.", false);
+      showMessageThenRedirect("Could not get pantry item.", false, "pantry.html");
       return false;
     }
     const data = await response.json();
@@ -65,15 +65,12 @@ window.removePantryItem = async function (item_id) {
   if (!response.ok) {
     if (response.status == 401) {
       redirectToLogin();
-      return false;
     }
     showMessage("Failed to delete pantry item!", false);
-    return false;
   } else {
-    console.log("Deleted pantry item with id {}", item_id);
-    window.location.href = "pantry.html";
-    return false;
+    showMessageThenRedirect("Successfully deleted pantry item.", true, "pantry.html");
   }
+  return false;
 }
 
 window.savePantryItem = async function (item_id) {
@@ -103,12 +100,10 @@ window.savePantryItem = async function (item_id) {
   if (!response.ok) {
     if (response.status == 401) {
       redirectToLogin();
-      return false;
     }
     showMessage("Failed to save pantry item!", false);
-    return false;
   } else {
     showMessage("Pantry item saved successfully!", true);
-    return false;
   }
+  return false;
 }

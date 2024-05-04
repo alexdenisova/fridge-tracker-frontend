@@ -1,7 +1,7 @@
 import { getIngredientName, makeIngredientIfNotExists } from "../backend/ingredients.js";
 import { listRecipeIngredients, postRecipeIngredient } from "../backend/recipe_ingredients.js";
 import { deleteRecipe, getRecipe, putRecipe } from "../backend/recipes.js";
-import { getOrNull, showMessage } from "../utils.js";
+import { getOrNull, showMessage, showMessageThenRedirect } from "../utils.js";
 import { INGREDIENT_TABLE_ID, main } from "./constants.js";
 import { createTable } from './ingredient_table.js';
 
@@ -16,7 +16,7 @@ export function showRecipe(item_id) {
         redirectToLogin();
         return false;
       }
-      showMessage("Could not get recipe.", false); //TODO: redirect to main with message
+      showMessageThenRedirect("Could not get recipe.", false, "index.html");
       return false;
     }
     const form = document.createElement('form');
@@ -61,15 +61,12 @@ window.removeRecipe = async function (item_id) {
   if (!response.ok) {
     if (response.status == 401) {
       redirectToLogin();
-      return false;
     }
     showMessage("Failed to delete recipe!", false);
-    return false;
   } else {
-    console.log("Deleted recipe with id {}", item_id);
-    window.location.href = "index.html";
-    return false;
+    showMessageThenRedirect("Successfully deleted recipe.", true, "index.html");
   }
+  return false;
 }
 
 window.saveRecipe = async function (item_id) {
@@ -88,14 +85,12 @@ window.saveRecipe = async function (item_id) {
     } else {
       showMessage("Recipe saved, but not all ingredients!", false);
     }
-    return false;
   } else if (response.status == 401) {
     redirectToLogin();
-    return false;
   } else {
     showMessage("Failed to save recipe!", false);
-    return false;
   }
+  return false;
 }
 
 async function postOrPutRecipeIngredients(recipe_id) {

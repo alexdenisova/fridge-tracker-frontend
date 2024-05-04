@@ -1,5 +1,5 @@
 import { postIngredient } from "../backend/ingredients.js";
-import { clickButton, hideElement, showElement, showMessage } from "../utils.js";
+import { clickButton, hideElement, showElement, showMessage, showMessageThenRedirect } from "../utils.js";
 import { LIST_ID, main } from "./constants.js";
 
 export const ADD_ID = "add_ingredient_form";
@@ -37,16 +37,12 @@ window.submitIngredient = async function () {
 
   const response = await postIngredient(name, can_be_eaten_raw);
   if (response.ok) {
-    const result = await response.json();
-    console.log("Created ingredient with id {}", result.id);
-    window.location.href = "ingredients.html";
-    return false;
+    showMessageThenRedirect("Ingredient added successfully!", true, "ingredients.html");
   } else {
     if (response.status == 401) {
       redirectToLogin();
-      return false;
     }
     showMessage("Failed to create ingredient!", false);
-    return false;
   }
+  return false;
 }
