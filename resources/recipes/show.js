@@ -81,9 +81,9 @@ window.saveRecipe = async function (item_id) {
     const data = await response.json();
     const all_ingredients_added = await postOrPutRecipeIngredients(data.id);
     if (all_ingredients_added) {
-      showMessage("Recipe saved successfully!", true);
+      showMessageThenRedirect("Successfully saved recipe!", true, "index.html");
     } else {
-      showMessage("Recipe saved, but not all ingredients!", false);
+      showMessageThenRedirect("Recipe saved, but not all ingredients!", false, "recipe.html?id=" + item_id);
     }
   } else if (response.status == 401) {
     redirectToLogin();

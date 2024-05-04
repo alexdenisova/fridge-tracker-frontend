@@ -108,7 +108,7 @@ window.savePantryItem = async function (item_id) {
     }
     showMessage("Failed to save pantry item!", false);
   } else {
-    showMessage("Pantry item saved successfully!", true);
+    showMessageThenRedirect("Successfully saved pantry item!", true, "pantry.html");
   }
   return false;
 }

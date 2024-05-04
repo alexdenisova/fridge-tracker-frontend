@@ -49,7 +49,7 @@ window.saveIngredient = async function (item_id) {
     }
     showMessage("Failed to save ingredient!", false);
   } else {
-    showMessage("Ingredient saved successfully!", true);
+    showMessageThenRedirect("Successfully saved ingredient!", true, "ingredients.html");
   }
   return false;
 }
