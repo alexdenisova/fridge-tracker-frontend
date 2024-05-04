@@ -45,14 +45,15 @@ export function showPantryItem(item_id) {
     }
     inner_html += `
       <p class="detail">Amount: <input type="text" id="edit_amount" value="${amount}"> ${select.outerHTML}</p>
+      <p class="detail">Running low at: <input type="text" id="edit_running_low" value="${data.running_low || ""}"></p>
       <p class="detail">Purchase Date: <input type="text" id="edit_purchase_date" value="${data.purchase_date || ""}"></p>
       <p class="detail">Expiration Date: <input type="text" id="edit_expiration_date" value="${data.expiration_date || ""}"></p>`;
     let checked = "";
-    if (ingredient.can_be_eaten_raw == true) {
+    if (data.essential == true) {
       checked = "checked=true";
     }
-    inner_html += `<label for="can_be_eaten_raw">Can Be Eaten Raw:</label>
-      <input type="checkbox" id="edit_can_be_eaten_raw" ${checked}><br>
+    inner_html += `<label for="essential">Essential:</label>
+      <input type="checkbox" id="edit_essential" ${checked}><br>
       <button type="button" id="${SAVE_ID}" onclick="savePantryItem('${item_id}');" value="Save" style="width:20%;height:100%;">Save</button>
       <button type="button" id="${DELETE_ID}" onclick="removePantryItem('${item_id}');" value="Delete" style="width:20%;height:100%;">Delete</button>`;
     form.innerHTML = inner_html;
@@ -75,8 +76,9 @@ window.removePantryItem = async function (item_id) {
 
 window.savePantryItem = async function (item_id) {
   const amount = getOrNull(document.getElementById('edit_amount'), "value");
-  if (isNaN(amount) || amount == null) {
-    showMessage("Amount must be a number", false);
+  const running_low = getOrNull(document.getElementById('edit_running_low'), "value");
+  if (isNaN(amount) || amount == null && isNaN(running_low) || running_low == null) {
+    showMessage("Amount must be a number or none", false);
     return false;
   }
   const unit_options = document.getElementById("edit_unit");
@@ -86,14 +88,17 @@ window.savePantryItem = async function (item_id) {
   const ingredient_name = document.getElementById('ingredient_name').innerText;
   const purchase_date = getOrNull(document.getElementById('edit_purchase_date'), "value");
   const expiration_date = getOrNull(document.getElementById('edit_expiration_date'), "value");
-  const can_be_eaten_raw = document.getElementById('edit_can_be_eaten_raw').checked;
+  const essential = document.getElementById('edit_essential').checked;
 
-  const ingredient_id = await makeIngredientIfNotExists(ingredient_name, can_be_eaten_raw);
+  const ingredient_id = await makeIngredientIfNotExists(ingredient_name);
   let new_map = new Map(Object.entries({
     ...purchase_date && { 'purchase_date': purchase_date },
     ...expiration_date && { 'expiration_date': expiration_date },
     ...ingredient_id && { 'ingredient_id': ingredient_id },
+    ...running_low && { 'running_low': Number(running_low) },
+    'essential': essential,
   }));
+  console.log(new_map);
   map = new Map([...map, ...new_map])
 
   const response = await putPantryItem(item_id, map);

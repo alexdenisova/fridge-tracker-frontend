@@ -93,6 +93,18 @@ window.saveRecipe = async function (item_id) {
   return false;
 }
 
+async function removeRecipeIngredients(recipe_id) {
+  const list_response = await listRecipeIngredients(recipe_id);
+  if (!list_response.ok) {
+    return false;
+  }
+  const ri = await list_response.json();
+  for (var j = 0; j < ri.items.length; j++) {
+    await deleteRecipeIngredient(ri.items[j].id);
+  }
+  return true;
+}
+
 async function postOrPutRecipeIngredients(recipe_id) {
   if (! await removeRecipeIngredients(recipe_id)) {
     return false;

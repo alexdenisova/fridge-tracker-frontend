@@ -20,14 +20,7 @@ export function showIngredient(item_id) {
     form.setAttribute("id", CHANGE_ID);
 
     const ingredient = await response.json();
-    let inner_html = `<p class="title" id="ingredient_name">${ingredient.name}</p>`;
-
-    let checked = "";
-    if (ingredient.can_be_eaten_raw == true) {
-      checked = "checked=true";
-    }
-    inner_html += `<label for="can_be_eaten_raw">Can Be Eaten Raw:</label>
-      <input class="checkbox" type="checkbox" id="edit_can_be_eaten_raw" ${checked}><br>
+    let inner_html = `<p class="title" id="ingredient_name">${ingredient.name}</p>
       <button type="button" id="${SAVE_ID}" onclick="saveIngredient('${item_id}');" value="Save" style="width:20%;height:100%;">Save</button>
       <button type="button" id="${DELETE_ID}" onclick="removeIngredient('${item_id}');" value="Delete" style="width:20%;height:100%;">Delete</button>`;
     form.innerHTML = inner_html;
@@ -49,9 +42,7 @@ window.removeIngredient = async function (item_id) {
 }
 
 window.saveIngredient = async function (item_id) {
-  const can_be_eaten_raw = document.getElementById('edit_can_be_eaten_raw').checked;
-
-  const response = await patchIngredient(item_id, can_be_eaten_raw);
+  const response = await patchIngredient(item_id);
   if (!response.ok) {
     if (response.status == 401) {
       redirectToLogin();

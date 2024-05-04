@@ -34,8 +34,10 @@ function addForm() {
     <input type="text" id="expiration_date" name="expiration_date"><br>
     <label for="amount">Amount: </label><br>
     <input type="text" id="amount" name="amount"> ${select.outerHTML}<br>
-    <label for="can_be_eaten_raw">Can Be Eaten Raw:</label>
-    <input type="checkbox" id="can_be_eaten_raw"><br>
+    <label for="running_low">Running low at: </label><br>
+    <input type="text" id="running_low" name="running_low"><br>
+    <label for="essential">Essential:</label>
+    <input type="checkbox" id="essential"><br>
     <input type="submit" value="Submit" style="width:50%;height:100%;">`
   main.appendChild(form);
 }
@@ -44,22 +46,25 @@ window.submitPantryItem = async function () {
   const name = document.getElementById('ingredient_name').value;
   const purchase_date = document.getElementById('purchase_date').value;
   const expiration_date = document.getElementById('expiration_date').value;
-  const can_be_eaten_raw = document.getElementById('can_be_eaten_raw').checked;
+  const essential = document.getElementById('essential').checked;
 
   const amount = getOrNull(document.getElementById('amount'), "value");
-  if (isNaN(amount) || amount == null) {
-    showMessage("Amount must be a number", false);
+  const running_low = getOrNull(document.getElementById('running_low'), "value");
+  if (isNaN(amount) || amount == null && isNaN(running_low) || running_low == null) {
+    showMessage("Amount must be a number or none", false);
     return false;
   }
   const unit_options = document.getElementById("edit_unit");
   let unit = unit_options.options[unit_options.selectedIndex].text;
   let map = transformAmount(amount, unit);
 
-  const ingredient_id = await makeIngredientIfNotExists(name, can_be_eaten_raw);
+  const ingredient_id = await makeIngredientIfNotExists(name);
   let new_map = new Map(Object.entries({
     ...purchase_date && { 'purchase_date': purchase_date },
     ...expiration_date && { 'expiration_date': expiration_date },
     ...ingredient_id && { 'ingredient_id': ingredient_id },
+    ...running_low && { 'running_low': Number(running_low) },
+    'essential': essential,
   }));
   map = new Map([...map, ...new_map])
 

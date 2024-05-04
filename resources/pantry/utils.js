@@ -21,7 +21,7 @@ export function transformAmount(amount, unit) {
     return result;
   }
   if (unit == "-") {
-    result.set("amount", Number(amount))
+    result.set("quantity", Number(amount))
   } else if (unit == "g") {
     result.set("weight_grams", Number(amount))
   } else if (unit == "ml") {

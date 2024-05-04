@@ -31,7 +31,7 @@ export async function listIngredients(ingredient_name = null) {
   });
 }
 
-export async function postIngredient(ingredient_name, can_be_eaten_raw) {
+export async function postIngredient(ingredient_name) {
   return await fetch(INGREDIENT_ENDPOINT, {
     method: 'POST',
     headers: {
@@ -40,14 +40,13 @@ export async function postIngredient(ingredient_name, can_be_eaten_raw) {
     },
     body: JSON.stringify({
       "name": ingredient_name,
-      ...can_be_eaten_raw && { 'can_be_eaten_raw': can_be_eaten_raw },
     })
   }).then(response => {
     return response;
   });
 }
 
-export async function patchIngredient(ingredient_id, can_be_eaten_raw) {
+export async function patchIngredient(ingredient_id) {
   return await fetch(INGREDIENT_ENDPOINT + "/" + ingredient_id, {
     method: 'PATCH',
     headers: {
@@ -55,7 +54,7 @@ export async function patchIngredient(ingredient_id, can_be_eaten_raw) {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      ...can_be_eaten_raw && { 'can_be_eaten_raw': can_be_eaten_raw },
+      // ...can_be_eaten_raw && { 'can_be_eaten_raw': can_be_eaten_raw },
     })
   }).then(response => {
     return response;
@@ -104,21 +103,17 @@ export async function getIngredientId(ingredient_name) {
 
 
 // returns ingredient_id
-export async function makeIngredientIfNotExists(ingredient_name, can_be_eaten_raw = null) {
+export async function makeIngredientIfNotExists(ingredient_name) {
   return await getIngredientId(ingredient_name).then(async ingredient_id => {
     if (ingredient_id != null) {
       const response = await getIngredient(ingredient_id);
       if (responseIsOk(response)) {
-        const ingredient = await response.json();
-        if (ingredient.can_be_eaten_raw != can_be_eaten_raw) {
-          await patchIngredient(ingredient_id, can_be_eaten_raw);
-        }
         return ingredient_id;
       } else {
         return null;
       }
     } else {
-      const response = await postIngredient(ingredient_name, can_be_eaten_raw);
+      const response = await postIngredient(ingredient_name);
       if (!response.ok) {
         if (response.status == 401) {
           redirectToLogin();

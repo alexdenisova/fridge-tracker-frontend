@@ -25,17 +25,14 @@ function addForm() {
   form.innerHTML = `
     <label for="ingredient_name">Ingredient Name*:</label><br>
     <input type="text" id="ingredient_name" name="ingredient_name"><br>
-    <label for="can_be_eaten_raw">Can Be Eaten Raw:</label>
-    <input type="checkbox" id="can_be_eaten_raw"><br>
     <input type="submit" value="Submit" style="width:50%;height:100%;">`
   main.appendChild(form);
 }
 
 window.submitIngredient = async function () {
   const name = document.getElementById('ingredient_name').value;
-  const can_be_eaten_raw = document.getElementById('can_be_eaten_raw').checked;
 
-  const response = await postIngredient(name, can_be_eaten_raw);
+  const response = await postIngredient(name);
   if (response.ok) {
     showMessageThenRedirect("Ingredient added successfully!", true, "ingredients.html");
   } else {
