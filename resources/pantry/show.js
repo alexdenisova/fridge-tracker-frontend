@@ -70,7 +70,7 @@ window.removePantryItem = async function (item_id) {
     showMessage("Failed to delete pantry item!", false);
     return false;
   } else {
-    showMessage("Pantry item deleted successfully!", true);
+    console.log("Deleted pantry item with id {}", item_id);
     window.location.href = "pantry.html";
     return false;
   }
@@ -108,10 +108,7 @@ window.savePantryItem = async function (item_id) {
     showMessage("Failed to save pantry item!", false);
     return false;
   } else {
-    const data = await response.json();
-    console.log("Saved pantry item with id ", data.id);
     showMessage("Pantry item saved successfully!", true);
-    window.location.href = "pantry.html";
     return false;
   }
 }

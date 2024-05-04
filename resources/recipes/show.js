@@ -1,5 +1,5 @@
 import { getIngredientName, makeIngredientIfNotExists } from "../backend/ingredients.js";
-import { deleteRecipeIngredient, listRecipeIngredients, postRecipeIngredient } from "../backend/recipe_ingredients.js";
+import { listRecipeIngredients, postRecipeIngredient } from "../backend/recipe_ingredients.js";
 import { deleteRecipe, getRecipe, putRecipe } from "../backend/recipes.js";
 import { getOrNull, showMessage } from "../utils.js";
 import { INGREDIENT_TABLE_ID, main } from "./constants.js";
@@ -16,7 +16,7 @@ export function showRecipe(item_id) {
         redirectToLogin();
         return false;
       }
-      showMessage("Could not get recipe.", false);
+      showMessage("Could not get recipe.", false); //TODO: redirect to main with message
       return false;
     }
     const form = document.createElement('form');
@@ -66,23 +66,10 @@ window.removeRecipe = async function (item_id) {
     showMessage("Failed to delete recipe!", false);
     return false;
   } else {
-    await removeRecipeIngredients(item_id);
-    showMessage("Recipe deleted successfully!", true);
+    console.log("Deleted recipe with id {}", item_id);
     window.location.href = "index.html";
     return false;
   }
-}
-
-async function removeRecipeIngredients(recipe_id) {
-  const list_response = await listRecipeIngredients(recipe_id);
-  if (!list_response.ok) {
-    return false;
-  }
-  const ri = await list_response.json();
-  for (var j = 0; j < ri.items.length; j++) {
-    await deleteRecipeIngredient(ri.items[j].id);
-  }
-  return true;
 }
 
 window.saveRecipe = async function (item_id) {
@@ -95,11 +82,9 @@ window.saveRecipe = async function (item_id) {
   const response = await putRecipe(item_id, name, cooking_time, link, instructions, image);
   if (response.ok) {
     const data = await response.json();
-    console.log("Saved recipe with id {}", data.id);
     const all_ingredients_added = await postOrPutRecipeIngredients(data.id);
     if (all_ingredients_added) {
       showMessage("Recipe saved successfully!", true);
-      window.location.href = "index.html";
     } else {
       showMessage("Recipe saved, but not all ingredients!", false);
     }

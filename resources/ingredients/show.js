@@ -45,7 +45,7 @@ window.removeIngredient = async function (item_id) {
     showMessage("Failed to delete ingredient!", false);
     return false;
   } else {
-    showMessage("Ingredient deleted successfully!", true);
+    console.log("Deleted ingredient with id {}", item_id);
     window.location.href = "ingredients.html";
     return false;
   }
@@ -64,7 +64,6 @@ window.saveIngredient = async function (item_id) {
     return false;
   } else {
     showMessage("Ingredient saved successfully!", true);
-    window.location.href = "ingredients.html";
     return false;
   }
 }

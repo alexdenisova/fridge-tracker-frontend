@@ -71,10 +71,11 @@ window.submitRecipe = async function () {
     const all_ingredients_added = await postRecipeIngredients(data.id);
     if (all_ingredients_added) {
       showMessage("Recipe added successfully!", true);
+      window.location.href = "index.html";
     } else {
       showMessage("Recipe added, but not all ingredients!", false);
+      window.location.href = "recipe.html?id=" + data.id; //TODO: ?message=...
     }
-    window.location.href = "index.html";
     return false;
   } else if (response.status == 401) {
     redirectToLogin();
