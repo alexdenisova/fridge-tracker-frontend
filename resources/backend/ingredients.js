@@ -14,32 +14,21 @@ export async function getIngredient(ingredient_id) {
   });
 }
 
-export async function getIngredientName(ingredient_id) {
-  return await getIngredient(ingredient_id).then(async response => {
-    if (!response.ok) {
-      return null;
-    } else {
-      const data = await response.json();
-      return data.name;
-    }
-  });
-}
-
-export async function getIngredientId(ingredient_name) {
-  return await fetch(INGREDIENT_ENDPOINT + `?name=${ingredient_name}`, {
+/// Get ids of ingredients that contain ingredient_name
+export async function listIngredients(ingredient_name = null) {
+  let options = "";
+  if (ingredient_name != null) {
+    options = `?name=${ingredient_name}`;
+  }
+  return await fetch(INGREDIENT_ENDPOINT + options, {
     method: 'GET',
     headers: {
       'Accept': 'application/json, text/plain, */*',
       'Content-Type': 'application/json'
     },
-  }).then(res => res.json())
-    .then(data => {
-      if (data.items.length > 0) {
-        return data.items[0].id;
-      } else {
-        return null;
-      }
-    });
+  }).then(response => {
+    return response;
+  });
 }
 
 export async function postIngredient(ingredient_name, can_be_eaten_raw) {
@@ -72,6 +61,47 @@ export async function patchIngredient(ingredient_id, can_be_eaten_raw) {
     return response;
   });
 }
+
+export async function deleteIngredient(id) {
+  return await fetch(INGREDIENT_ENDPOINT + "/" + id, {
+    method: 'DELETE',
+    headers: {
+      'Accept': 'application/json, text/plain, */*',
+      'Content-Type': 'application/json'
+    },
+  }).then(response => {
+    return response;
+  });
+}
+
+
+export async function getIngredientName(ingredient_id) {
+  return await getIngredient(ingredient_id).then(async response => {
+    if (!response.ok) {
+      return null;
+    } else {
+      const data = await response.json();
+      return data.name;
+    }
+  });
+}
+
+/// Get ingredient id by name
+export async function getIngredientId(ingredient_name) {
+  return await listIngredients(ingredient_name).then(async response => {
+    if (!response.ok) {
+      return null;
+    } else {
+      const data = await response.json();
+      if (data.items.length > 0) {
+        return data.items[0].id;
+      } else {
+        return null;
+      }
+    }
+  });
+}
+
 
 // returns ingredient_id
 export async function makeIngredientIfNotExists(ingredient_name, can_be_eaten_raw = null) {
