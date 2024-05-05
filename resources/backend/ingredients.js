@@ -73,7 +73,6 @@ export async function deleteIngredient(id) {
   });
 }
 
-
 export async function getIngredientName(ingredient_id) {
   return await getIngredient(ingredient_id).then(async response => {
     if (!response.ok) {
