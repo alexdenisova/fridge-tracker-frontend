@@ -10,6 +10,7 @@ on:
 jobs:
   update-version:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
     outputs:
       stop_workflow: ${{ steps.update_version.outputs.stop_workflow }}
       release_version: ${{ steps.update_version.outputs.release_version }}
