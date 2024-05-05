@@ -75,6 +75,11 @@ runs:
         tmp=$(mktemp)
         jq ".version = \"${{ steps.compute.outputs.release_version }}\"" package.json > "$tmp"
         mv "$tmp" package.json
+        tmp=$(mktemp)
+        jq ".version = \"${{ steps.compute.outputs.release_version }}\"" package-lock.json > "$tmp"
+        cp "$tmp" package-lock.json
+        jq ".packages.\"\".version = \"${{ steps.compute.outputs.release_version }}\"" package-lock.json > "$tmp"
+        mv "$tmp" package-lock.json
 
         git config --global user.name 'Version Update'
         git config --global user.email 'alexadenisova@gmail.com'
