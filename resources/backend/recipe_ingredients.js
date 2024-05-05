@@ -39,8 +39,15 @@ export async function putRecipeIngredient(id, recipe_id, ingredient_id, optional
   });
 }
 
-export async function listRecipeIngredients(recipe_id) {
-  return await fetch(RECIPE_INGREDIENT_ENDPOINT + "?recipe_id=" + recipe_id, {
+export async function listRecipeIngredients(recipe_id, ingredient_id = null) {
+  let params = "";
+  if (recipe_id != null) {
+    params = "?recipe_id=" + recipe_id;
+  }
+  if (ingredient_id != null) {
+    params = "?ingredient_id=" + ingredient_id;
+  }
+  return await fetch(RECIPE_INGREDIENT_ENDPOINT + params, {
     method: 'GET',
     headers: {
       'Accept': 'application/json, text/plain, */*',

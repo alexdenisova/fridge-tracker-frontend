@@ -1,7 +1,7 @@
 import { LOGIN_ENDPOINT } from "./constant";
 
 
-export async function postLogin(username, password) {
+export async function postLogin(username, password=null) {
   return await fetch(LOGIN_ENDPOINT, {
     method: 'POST',
     headers: {
@@ -10,7 +10,7 @@ export async function postLogin(username, password) {
     },
     body: JSON.stringify({
       "username": username,
-      "password": password,
+      ...password && { 'password': password },
     }),
   }).then(response => {
     if (response.ok && response.redirected) {

@@ -119,6 +119,10 @@ li p {
   display: inline-block;
 }
 
+.removable_list {
+  list-style-type: none;
+}
+
 .add {
   text-decoration: none;
   font-size: 12px;
