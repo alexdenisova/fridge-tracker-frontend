@@ -81,7 +81,6 @@ window.saveIngredient = async function (item_id) {
   }
   const names = document.getElementById(INGREDIENT_NAME_LIST_ID).getElementsByTagName("li");
   for (let i = 0; i < names.length; i++) {
-    console.log(names[i].id);
     await postIngredientName(names[i].id, item_id);
   }
   if (parent != null) {
@@ -97,7 +96,6 @@ window.saveIngredient = async function (item_id) {
     }
     const pantry_items = await (await listPantryItems("ingredient_id=" + item_id)).json();
     for (const ing of pantry_items.items) {
-      console.log(ing.id);
       let map = new Map(Object.entries({
         "ingredient_id": parent_id,
         'purchase_date': ing.purchase_date,

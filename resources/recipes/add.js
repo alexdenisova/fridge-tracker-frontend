@@ -67,7 +67,6 @@ window.submitRecipe = async function () {
   const response = await postRecipe(name, cooking_time_mins, link, instructions, image);
   if (response.ok) {
     const data = await response.json();
-    console.log("Created recipe with id {}", data.id);
     const all_ingredients_added = await postRecipeIngredients(data.id);
     if (all_ingredients_added) {
       showMessageThenRedirect("Recipe added successfully!", true, "index.html");

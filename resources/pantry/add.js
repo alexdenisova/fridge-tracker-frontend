@@ -50,7 +50,7 @@ window.submitPantryItem = async function () {
 
   const amount = getOrNull(document.getElementById('amount'), "value");
   const running_low = getOrNull(document.getElementById('running_low'), "value");
-  if (isNaN(amount) || amount == null && isNaN(running_low) || running_low == null) {
+  if (isNaN(amount) && amount != null || isNaN(running_low) && running_low != null) {
     showMessage("Amount must be a number or none", false);
     return false;
   }

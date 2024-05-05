@@ -77,7 +77,7 @@ window.removePantryItem = async function (item_id) {
 window.savePantryItem = async function (item_id) {
   const amount = getOrNull(document.getElementById('edit_amount'), "value");
   const running_low = getOrNull(document.getElementById('edit_running_low'), "value");
-  if (isNaN(amount) || amount == null && isNaN(running_low) || running_low == null) {
+  if (isNaN(amount) && amount != null || isNaN(running_low) && running_low != null) {
     showMessage("Amount must be a number or none", false);
     return false;
   }
@@ -98,7 +98,6 @@ window.savePantryItem = async function (item_id) {
     ...running_low && { 'running_low': Number(running_low) },
     'essential': essential,
   }));
-  console.log(new_map);
   map = new Map([...map, ...new_map])
 
   const response = await putPantryItem(item_id, map);
