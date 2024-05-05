@@ -1,15 +1,13 @@
 import { getIngredientName, makeIngredientIfNotExists } from "../backend/ingredients.js";
-import { deleteRecipeIngredient, listRecipeIngredients, postRecipeIngredient } from "../backend/recipe_ingredients.js";
+import { listRecipeIngredients, postRecipeIngredient } from "../backend/recipe_ingredients.js";
 import { deleteRecipe, getRecipe, putRecipe } from "../backend/recipes.js";
-import { getOrNull, showMessage } from "../utils.js";
+import { getOrNull, showMessage, showMessageThenRedirect } from "../utils.js";
 import { INGREDIENT_TABLE_ID, main } from "./constants.js";
 import { createTable } from './ingredient_table.js';
 
 const CHANGE_ID = "change_recipe";
 const SAVE_ID = "save_recipe";
 const DELETE_ID = "delete_recipe";
-
-var clicked;
 
 export function showRecipe(item_id) {
   getRecipe(item_id).then(async function (response) {
@@ -18,24 +16,21 @@ export function showRecipe(item_id) {
         redirectToLogin();
         return false;
       }
-      showMessage("Could not get recipe.", false);
+      showMessageThenRedirect("Could not get recipe.", false, "index.html");
       return false;
     }
-    const data = await response.json();
-
     const form = document.createElement('form');
-    form.setAttribute("onsubmit", "changeRecipe('" + item_id + "'); return false;");
     form.setAttribute("id", CHANGE_ID);
-    main.appendChild(form);
 
-    let inner_html = `<p class="title" id="edit_name">${data.name}</p>
-      <p class="detail">Link: <input type="text" id="edit_link" value="${data.link || ""}"></p>
-      <p class="detail">Cooking Time: <input type="text" id="edit_cooking_time" value="${data.cooking_time_mins || ""}">mins</p>
+    const recipe = await response.json();
+    let inner_html = `<p class="title" id="edit_name">${recipe.name}</p>
+      <p class="detail">Link: <input type="text" id="edit_link" value="${recipe.link || ""}"></p>
+      <p class="detail">Cooking Time: <input type="text" id="edit_cooking_time" value="${recipe.cooking_time_mins || ""}">mins</p>
       <p class="detail">Instructions:</p>
-      <textarea id="edit_instructions">${data.instructions || ""}</textarea>
-      <p class="detail">Image Link: <input type="text" id="edit_image" value="${data.image || ""}"></p>`;
+      <textarea id="edit_instructions">${recipe.instructions || ""}</textarea>
+      <p class="detail">Image Link: <input type="text" id="edit_image" value="${recipe.image || ""}"></p>`;
 
-    const ingredient_response = await listRecipeIngredients(data.id);
+    const ingredient_response = await listRecipeIngredients(recipe.id);
     if (!response.ok) {
       if (response.status == 401) {
         redirectToLogin();
@@ -54,41 +49,48 @@ export function showRecipe(item_id) {
 
     inner_html += createTable(parsed_ingredients);
 
-    inner_html += `<br><input type="submit" id="${SAVE_ID}" onclick="clickSubmit('Save');" value="Save" style="width:20%;height:100%;">
-    <input type="submit" id="${DELETE_ID}" onclick="clickSubmit('Delete');" value="Delete" style="width:20%;height:100%;">`;
-    document.getElementById(CHANGE_ID).innerHTML = inner_html;
-
+    inner_html += `<br><button type="button" id="${SAVE_ID}" onclick="saveRecipe('${item_id}');" value="Save" style="width:20%;height:100%;">Save</button>
+    <button type="button" id="${DELETE_ID}" onclick="removeRecipe('${item_id}');" value="Delete" style="width:20%;height:100%;">Delete</button>`;
+    form.innerHTML = inner_html;
+    main.appendChild(form);
   });
 }
 
-window.clickSubmit = function (name) {
-  console.log('clicked');
-  clicked = name;
-}
-
-window.changeRecipe = async function (item_id) {
-  if (clicked == "Save") {
-    await saveRecipe(item_id);
-  } else if (clicked == "Delete") {
-    await removeRecipe(item_id);
-  }
-}
-
-async function removeRecipe(item_id) {
+window.removeRecipe = async function (item_id) {
   const response = await deleteRecipe(item_id);
   if (!response.ok) {
     if (response.status == 401) {
       redirectToLogin();
-      return false;
     }
     showMessage("Failed to delete recipe!", false);
-    return false;
   } else {
-    await removeRecipeIngredients(item_id);
-    showMessage("Recipe deleted successfully!", true);
-    window.location.href = "index.html";
-    return false;
+    showMessageThenRedirect("Successfully deleted recipe.", true, "index.html");
   }
+  return false;
+}
+
+window.saveRecipe = async function (item_id) {
+  const name = document.getElementById('edit_name').innerText;
+  const link = getOrNull(document.getElementById('edit_link'), "value");
+  const cooking_time = getOrNull(document.getElementById('edit_cooking_time'), "value");
+  const instructions = getOrNull(document.getElementById('edit_instructions'), "value");
+  const image = getOrNull(document.getElementById('edit_image'), "value");
+
+  const response = await putRecipe(item_id, name, cooking_time, link, instructions, image);
+  if (response.ok) {
+    const data = await response.json();
+    const all_ingredients_added = await postOrPutRecipeIngredients(data.id);
+    if (all_ingredients_added) {
+      showMessageThenRedirect("Successfully saved recipe!", true, "index.html");
+    } else {
+      showMessageThenRedirect("Recipe saved, but not all ingredients!", false, "recipe.html?id=" + item_id);
+    }
+  } else if (response.status == 401) {
+    redirectToLogin();
+  } else {
+    showMessage("Failed to save recipe!", false);
+  }
+  return false;
 }
 
 async function removeRecipeIngredients(recipe_id) {
@@ -101,34 +103,6 @@ async function removeRecipeIngredients(recipe_id) {
     await deleteRecipeIngredient(ri.items[j].id);
   }
   return true;
-}
-
-async function saveRecipe(item_id) {
-  const name = document.getElementById('edit_name').innerText;
-  const link = getOrNull(document.getElementById('edit_link'), "value");
-  const cooking_time = getOrNull(document.getElementById('edit_cooking_time'), "value");
-  const instructions = getOrNull(document.getElementById('edit_instructions'), "value");
-  const image = getOrNull(document.getElementById('edit_image'), "value");
-
-  const response = await putRecipe(item_id, name, cooking_time, link, instructions, image);
-  if (response.ok) {
-    const data = await response.json();
-    console.log("Saved recipe with id {}", data.id);
-    const all_ingredients_added = await postOrPutRecipeIngredients(data.id);
-    if (all_ingredients_added) {
-      showMessage("Recipe saved successfully!", true);
-    } else {
-      showMessage("Recipe saved, but not all ingredients!", false);
-    }
-    // window.location.href = "index.html";
-    return false;
-  } else if (response.status == 401) {
-    redirectToLogin();
-    return false;
-  } else {
-    showMessage("Failed to save recipe!", false);
-    return false;
-  }
 }
 
 async function postOrPutRecipeIngredients(recipe_id) {

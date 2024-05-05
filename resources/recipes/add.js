@@ -3,7 +3,7 @@ import { getParseIngredients } from "../backend/parse_ingredients.js";
 import { getParseRecipeLink } from "../backend/parse_recipe_link.js";
 import { postRecipeIngredient } from "../backend/recipe_ingredients.js";
 import { postRecipe } from "../backend/recipes.js";
-import { clickButton, hideElement, redirectToLogin, showElement, showMessage } from "../utils.js";
+import { clickButton, hideElement, redirectToLogin, showElement, showMessage, showMessageThenRedirect } from "../utils.js";
 import { INGREDIENT_TABLE_ID, LIST_ID, main } from "./constants.js";
 import { unpressFilterButton } from "./filter.js";
 
@@ -70,19 +70,16 @@ window.submitRecipe = async function () {
     console.log("Created recipe with id {}", data.id);
     const all_ingredients_added = await postRecipeIngredients(data.id);
     if (all_ingredients_added) {
-      showMessage("Recipe added successfully!", true);
+      showMessageThenRedirect("Recipe added successfully!", true, "index.html");
     } else {
-      showMessage("Recipe added, but not all ingredients!", false);
+      showMessageThenRedirect("Recipe added, but not all ingredients!", false, "recipe.html?id=" + data.id);
     }
-    window.location.href = "index.html";
-    return false;
   } else if (response.status == 401) {
     redirectToLogin();
-    return false;
   } else {
     showMessage("Failed to create recipe!", false);
-    return false;
   }
+  return false;
 }
 
 // TODO: return list of failed creations

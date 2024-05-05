@@ -21,7 +21,7 @@ export function transformAmount(amount, unit) {
     return result;
   }
   if (unit == "-") {
-    result.set("amount", Number(amount))
+    result.set("quantity", Number(amount))
   } else if (unit == "g") {
     result.set("weight_grams", Number(amount))
   } else if (unit == "ml") {
@@ -30,17 +30,21 @@ export function transformAmount(amount, unit) {
   return result;
 }
 
+export function daysLeft(date) {
+  const exp = Date.parse(date);
+  const now = new Date();
+  return Math.ceil((exp - now) / 60 / 60 / 24 / 1000);
+}
+
 export function expirationDate(expiration_date) {
   if (expiration_date == null) {
     return "-";
   }
-  const exp = Date.parse(expiration_date);
-  const now = new Date();
-  const days_left = Math.ceil((exp - now) / 60 / 60 / 24 / 1000);
+  const days_left = daysLeft(expiration_date);
   if (days_left < 0) {
     return "EXPIRED";
   } else if (days_left == 1) {
-    return "in 1 day";;
+    return "in 1 day";
   } else if (days_left <= 7) {
     return "in " + days_left + " days";
   } else {

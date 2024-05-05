@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Fridge Tracker Site</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="topnav">
+    <a href="index.html">Recipes</a>
+    <a href="pantry.html" href="pantry.html">Pantry</a>
+    <a class="active" href="ingredients.html">Ingredients</a>
+    <a href="login.html" onclick="logout()" style="float:right;">Logout</a>
+  </div>
+
+  <section id="section">
+    <div id='message_parent' class="message_parent">
+      <div id='message' class="message"></div>
+      <img class="message_close" src="https://findicons.com/files/icons/1715/gion/24/dialog_cancel.png"
+        onclick='document.getElementById("message_parent").style.display = "none";'>
+    </div>
+  </section>
+
+</body>
+<script type="module" src="./resources/ingredient.js"></script>
+<script type="module" src="./resources/login.js"></script>
+
+</html>

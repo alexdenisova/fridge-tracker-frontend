@@ -1,3 +1,5 @@
+import { TIME_BEFORE_REDIRECT } from "./constants.js";
+
 export function showMessage(message, is_good) {
   document.getElementById('message').textContent = message;
   if (is_good) {
@@ -62,4 +64,11 @@ export function responseIsOk(response) {
     return false;
   }
   return true;
+}
+
+export function showMessageThenRedirect(message, is_good, redirect) {
+  showMessage(message, is_good);
+  setTimeout(() => {
+    window.location.href = redirect;
+  }, TIME_BEFORE_REDIRECT);
 }
