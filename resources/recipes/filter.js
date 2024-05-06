@@ -46,9 +46,9 @@ function addFilter() {
   div.innerHTML = `
     <div id="${FILTER_POPUP_ID}">
       <pre><strong>Needs Ingredient: </strong>
-      <input type="text" id="${FILTER_TEXT_ID}" value=""><a id="${FILTER_ADD_BUTTON_ID}" href="#" onclick="addIngredient()">➕</a>
+      <input type="text" id="${FILTER_TEXT_ID}" value=""><a id="${FILTER_ADD_BUTTON_ID}" href="#" onclick="addIngredient()" style="text-decoration:none;">➕</a>
           </pre>
-      <ul id='${FILTER_INGREDIENT_LIST_ID}'>
+      <ul id='${FILTER_INGREDIENT_LIST_ID}' class="removable_list">
       </ul>
       <button onclick="filterRecipes()">Find recipes</button>
     </div>`;
@@ -69,7 +69,7 @@ window.addIngredient = function () {
   const li = document.createElement('li');
   li.setAttribute("id", text);
   li.innerHTML = `<p>${text}</p>
-  <button onclick="removeElement('${text}')">🗑️</button>`;
+  <button onclick="removeElement('${text}')">❌</button>`;
   list.appendChild(li);
   document.getElementById(FILTER_TEXT_ID).value = "";
 }

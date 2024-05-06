@@ -3,7 +3,6 @@ import { INGREDIENT_TABLE_ID } from "./constants";
 
 window.addIngredientRow = function () {
   const table = document.getElementById(INGREDIENT_TABLE_ID);
-  console.log(addIngredientRow());
   table.appendChild(addIngredientRow());
   return false;
 };
