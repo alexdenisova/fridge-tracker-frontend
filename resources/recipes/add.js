@@ -96,7 +96,6 @@ async function postRecipeIngredients(recipe_id) {
   const table = document.getElementById(INGREDIENT_TABLE_ID);
 
   let all_ingredients_added = true;
-  console.log(table.children[1].childElementCount);
   for (var i = 0; i < table.children[1].childElementCount; i++) {
     const tr_id = table.children[1].children[i].id;
     let amount = document.getElementById(tr_id + "-0").value;
@@ -104,7 +103,6 @@ async function postRecipeIngredients(recipe_id) {
     let name = document.getElementById(tr_id + "-2").value;
     let optional = document.getElementById(tr_id + "-3").checked;
     const ingredient_id = await makeIngredientIfNotExists(name);
-    console.log(recipe_id + ingredient_id + optional + amount + "unit: " + unit);
     const response = await postRecipeIngredient(recipe_id, ingredient_id, optional, amount, unit);
     if (!response.ok) {
       if (response.status == 401) {
