@@ -9,13 +9,17 @@
 <body>
 
   <section id="section">
-    <form onsubmit="login('username', 'password'); return false;">
+    <form>
       <label for="username">username:</label>
       <input type="text" id="username" name="username"><br>
       <label for="password">password:</label>
       <input type="text" id="password" name="password"><br>
-      <input type="submit" value="Login" onclick="clickSubmit('Login');" style="width:50%;height:100%;">
-      <input type="submit" value="Create Account" onclick="clickSubmit('Create');" style="width:50%;height:100%;">
+      <button type="button" value="Login" onclick="login('username', 'password');"
+        style="width:50%;height:100%;">Login</button>
+      <button type="button" value="Create Account" onclick="createAccount('username', 'password');"
+        style="width:50%;height:100%;">Create Account</button>
+        <button type="button" value="Demo" onclick="demo();"
+        style="width:50%;height:100%;">Demo</button>
     </form>
     <div id='message_parent' class="message_parent">
       <div id='message' class="message"></div>
