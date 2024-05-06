@@ -26,7 +26,7 @@ export function showRecipes(query_params = null) {
               <div class="recipe_card" id="${recipe.id}">
                 <a href="${recipe.link}"><center><img src="${recipe.image}" class="thumbnail"></center></a>
                 <p><a class="title" href="${recipe.link}">${recipe.name}</a></p>
-                <p class="detail">Cooking time: ${recipe.cooking_time_mins} mins</p>
+                <p class="detail">Total time: ${recipe.total_time_mins} mins</p>
                 <p class="detail"><a href="recipe.html?id=${recipe.id}" style="color:#143273">Details</a></p>
               </div>
             </div>

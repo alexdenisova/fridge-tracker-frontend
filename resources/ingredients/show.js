@@ -1,8 +1,8 @@
+import { deleteIngredientName, listIngredientNames, postIngredientName } from "../backend/ingredient_names.js";
 import { deleteIngredient, getIngredient, getIngredientId, getIngredientName } from "../backend/ingredients.js";
-import { listIngredientNames, deleteIngredientName, postIngredientName } from "../backend/ingredient_names.js";
-import { listRecipeIngredients, putRecipeIngredient } from "../backend/recipe_ingredients.js";
 import { listPantryItems, putPantryItem } from "../backend/pantry_items.js";
-import { showMessage, showMessageThenRedirect, getOrNull } from "../utils.js";
+import { listRecipeIngredients, putRecipeIngredient } from "../backend/recipe_ingredients.js";
+import { getOrNull, showMessage, showMessageThenRedirect } from "../utils.js";
 import { main } from "./constants.js";
 
 const CHANGE_ID = "change_ingredient";
@@ -94,7 +94,7 @@ window.saveIngredient = async function (item_id) {
     for (const ing of recipe_ingredients.items) {
       await putRecipeIngredient(ing.id, ing.recipe_id, parent_id, ing.optional, ing.amount, ing.unit)
     }
-    const pantry_items = await (await listPantryItems("ingredient_id=" + item_id)).json();
+    const pantry_items = await (await listPantryItems("ingredient_id=" + item_id + "&all=true")).json();
     for (const ing of pantry_items.items) {
       let map = new Map(Object.entries({
         "ingredient_id": parent_id,

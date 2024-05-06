@@ -44,16 +44,16 @@ export function showPantryItem(item_id) {
       select.children[2].setAttribute("selected", "selected");
     }
     inner_html += `
-      <p class="detail">Amount: <input type="text" id="edit_amount" value="${amount}"> ${select.outerHTML}</p>
-      <p class="detail">Running low at: <input type="text" id="edit_running_low" value="${data.running_low || ""}"></p>
-      <p class="detail">Purchase Date: <input type="text" id="edit_purchase_date" value="${data.purchase_date || ""}"></p>
-      <p class="detail">Expiration Date: <input type="text" id="edit_expiration_date" value="${data.expiration_date || ""}"></p>`;
+      <p class="detail">Amount: <input type="text" id="amount" value="${amount}"> ${select.outerHTML}</p>
+      <p class="detail">Running low at: <input type="text" id="running_low" value="${data.running_low || ""}"></p>
+      <p class="detail">Purchase Date: <input type="text" id="purchase_date" value="${data.purchase_date || ""}"></p>
+      <p class="detail">Expiration Date: <input type="text" id="expiration_date" value="${data.expiration_date || ""}"></p>`;
     let checked = "";
     if (data.essential == true) {
       checked = "checked=true";
     }
     inner_html += `<label for="essential">Essential:</label>
-      <input type="checkbox" id="edit_essential" ${checked}><br>
+      <input type="checkbox" id="essential" ${checked}><br>
       <button type="button" id="${SAVE_ID}" onclick="savePantryItem('${item_id}');" value="Save" style="width:20%;height:100%;">Save</button>
       <button type="button" id="${DELETE_ID}" onclick="removePantryItem('${item_id}');" value="Delete" style="width:20%;height:100%;">Delete</button>`;
     form.innerHTML = inner_html;
@@ -75,20 +75,20 @@ window.removePantryItem = async function (item_id) {
 }
 
 window.savePantryItem = async function (item_id) {
-  const amount = getOrNull(document.getElementById('edit_amount'), "value");
-  const running_low = getOrNull(document.getElementById('edit_running_low'), "value");
+  const amount = getOrNull(document.getElementById('amount'), "value");
+  const running_low = getOrNull(document.getElementById('running_low'), "value");
   if (isNaN(amount) && amount != null || isNaN(running_low) && running_low != null) {
     showMessage("Amount must be a number or none", false);
     return false;
   }
-  const unit_options = document.getElementById("edit_unit");
+  const unit_options = document.getElementById("unit");
   let unit = unit_options.options[unit_options.selectedIndex].text;
   let map = transformAmount(amount, unit);
 
   const ingredient_name = document.getElementById('ingredient_name').innerText;
-  const purchase_date = getOrNull(document.getElementById('edit_purchase_date'), "value");
-  const expiration_date = getOrNull(document.getElementById('edit_expiration_date'), "value");
-  const essential = document.getElementById('edit_essential').checked;
+  const purchase_date = getOrNull(document.getElementById('purchase_date'), "value");
+  const expiration_date = getOrNull(document.getElementById('expiration_date'), "value");
+  const essential = document.getElementById('essential').checked;
 
   const ingredient_id = await makeIngredientIfNotExists(ingredient_name);
   let new_map = new Map(Object.entries({
