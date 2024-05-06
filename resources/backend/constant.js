@@ -1,5 +1,6 @@
 const API_PREFIX = "/api"
 export const INGREDIENT_ENDPOINT = `${API_PREFIX}/ingredients`;
+export const INGREDIENT_NAME_ENDPOINT = `${API_PREFIX}/ingredient_names`;
 export const LOGIN_ENDPOINT = `${API_PREFIX}/login`;
 export const PANTRY_ITEMS_ENDPOINT = `${API_PREFIX}/pantry_items`;
 export const PARSE_INGREDIENTS_ENDPOINT = `${API_PREFIX}/parse_ingredients`;
