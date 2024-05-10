@@ -1,9 +1,10 @@
-import { UNIT_OPTIONS } from "./constants";
+import { UNIT_OPTIONS, UNIT_ID } from "./constants";
 
 // creates unit select button
 export function unitOptions() {
   const select = document.createElement('select');
-  select.setAttribute("id", "unit");
+  select.setAttribute("id", UNIT_ID);
+  select.setAttribute("class", "select-field");
   for (let i = 0; i < UNIT_OPTIONS.length; i++) {
     const opt = document.createElement('option');
     opt.value = UNIT_OPTIONS[i];
@@ -43,6 +44,8 @@ export function expirationDate(expiration_date) {
   const days_left = daysLeft(expiration_date);
   if (days_left < 0) {
     return "EXPIRED";
+  } else if (days_left == 0) {
+    return "TODAY"
   } else if (days_left == 1) {
     return "in 1 day";
   } else if (days_left <= 7) {

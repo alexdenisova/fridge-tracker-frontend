@@ -20,20 +20,15 @@ export function showPantryItem(item_id) {
     }
     const data = await response.json();
 
-    const select = unitOptions();
-    const form = document.createElement('form');
-    form.setAttribute("id", CHANGE_ID);
-
-
     const ingredient_response = await getIngredient(data.ingredient_id);
     if (ingredient_response.status == 401) {
       redirectToLogin();
       return false;
     }
-    const ingredient = await ingredient_response.json();
+    const ingredient = await ingredient_response.json()
 
-    let inner_html = `<p class="title" id="ingredient_name">${ingredient.name}</p>`;
     let amount = "";
+    const select = unitOptions();
     if (data.quantity != null) {
       amount = data.quantity;
     } else if (data.weight_grams != null) {
@@ -43,21 +38,24 @@ export function showPantryItem(item_id) {
       amount = data.volume_milli_litres;
       select.children[2].setAttribute("selected", "selected");
     }
-    inner_html += `
-      <p class="detail">Amount: <input type="text" id="amount" value="${amount}"> ${select.outerHTML}</p>
-      <p class="detail">Running low at: <input type="text" id="running_low" value="${data.running_low || ""}"></p>
-      <p class="detail">Purchase Date: <input type="text" id="purchase_date" value="${data.purchase_date || ""}"></p>
-      <p class="detail">Expiration Date: <input type="text" id="expiration_date" value="${data.expiration_date || ""}"></p>`;
     let checked = "";
     if (data.essential == true) {
       checked = "checked=true";
     }
-    inner_html += `<label for="essential">Essential:</label>
-      <input type="checkbox" id="essential" ${checked}><br>
-      <button type="button" id="${SAVE_ID}" onclick="savePantryItem('${item_id}');" value="Save" style="width:20%;height:100%;">Save</button>
-      <button type="button" id="${DELETE_ID}" onclick="removePantryItem('${item_id}');" value="Delete" style="width:20%;height:100%;">Delete</button>`;
-    form.innerHTML = inner_html;
-    main.appendChild(form);
+    const div = document.createElement("div");
+    div.setAttribute("class", "form");
+    div.innerHTML = `
+      <div class="form-heading" id="ingredient_name">${ingredient.name}</div>
+      <form id="${CHANGE_ID}">
+        <label for="purchase_date"><span>Purchase Date</span><input type="date" class="input-field" id="purchase_date" name="purchase_date" placeholder="YYYY-MM-DD" value="${data.purchase_date || ""}"></label>
+        <label for="expiration_date"><span>Expiraton Date</span><input type="date" class="input-field" id="expiration_date" name="expiration_date" placeholder="YYYY-MM-DD" value="${data.expiration_date || ""}"></label>
+        <label for="amount"><span>Amount</span><input type="text" class="input-field" id="amount" name="amount" style="width:30%;" value="${amount}">${select.outerHTML}</label>
+        <label for="running_low"><span>Running low at</span><input type="text" class="input-field" id="running_low" name="running_low" style="width:30%;" value="${data.running_low || ""}"></label>
+        <label for="essential"><span>Essential</span><input type="checkbox" class="input-checkbox" id="essential" ${checked}></label>
+        <button type="button" id="${SAVE_ID}" onclick="savePantryItem('${item_id}');" value="Save" style="width:20%;height:100%;">Save</button>
+        <button type="button" id="${DELETE_ID}" onclick="removePantryItem('${item_id}');" value="Delete" style="width:20%;height:100%;">Delete</button>
+      </form>`;
+    main.appendChild(div);
   });
 }
 

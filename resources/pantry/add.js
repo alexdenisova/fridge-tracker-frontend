@@ -1,7 +1,7 @@
 import { makeIngredientIfNotExists } from "../backend/ingredients.js";
 import { postPantryItem } from "../backend/pantry_items.js";
 import { clickButton, getOrNull, hideElement, showElement, showMessage, showMessageThenRedirect } from "../utils.js";
-import { LIST_ID, main } from "./constants.js";
+import { LIST_ID, UNIT_ID, main } from "./constants.js";
 import { transformAmount, unitOptions } from "./utils.js";
 
 export const ADD_ID = "add_pantry_item_form";
@@ -21,25 +21,22 @@ window.addPantryItemButton = function (add_id) {
 }
 
 function addForm() {
-  const form = document.createElement("form");
-  form.setAttribute("onsubmit", "submitPantryItem(); return false;");
-  form.setAttribute("id", ADD_ID);
+  const div = document.createElement("div");
+  div.setAttribute("class", "form");
+  div.setAttribute("id", ADD_ID);
   const select = unitOptions();
-  form.innerHTML = `
-    <label for="ingredient_name">Ingredient Name*:</label><br>
-    <input type="text" id="ingredient_name" name="ingredient_name"><br>
-    <label for="purchase_date">Purchase Date:</label><br>
-    <input type="text" id="purchase_date" name="purchase_date"><br>
-    <label for="expiration_date">Expiraton Date:</label><br>
-    <input type="text" id="expiration_date" name="expiration_date"><br>
-    <label for="amount">Amount: </label><br>
-    <input type="text" id="amount" name="amount"> ${select.outerHTML}<br>
-    <label for="running_low">Running low at: </label><br>
-    <input type="text" id="running_low" name="running_low"><br>
-    <label for="essential">Essential:</label>
-    <input type="checkbox" id="essential"><br>
-    <input type="submit" value="Submit" style="width:50%;height:100%;">`
-  main.appendChild(form);
+  div.innerHTML = `
+    <div class="form-heading">Provide recipe information</div>
+    <form onsubmit="submitPantryItem(); return false;">
+      <label for="ingredient_name"><span>Ingredient Name<span class="required">*</span></span><input type="text" class="input-field" id="ingredient_name" name="ingredient_name"></label>
+      <label for="purchase_date"><span>Purchase Date</span><input type="date" class="input-field" id="purchase_date" name="purchase_date" placeholder="YYYY-MM-DD"></label>
+      <label for="expiration_date"><span>Expiraton Date</span><input type="date" class="input-field" id="expiration_date" name="expiration_date" placeholder="YYYY-MM-DD"></label>
+      <label for="amount"><span>Amount</span><input type="text" class="input-field" id="amount" name="amount" style="width:30%;">${select.outerHTML}</label>
+      <label for="running_low"><span>Running low at</span><input type="text" class="input-field" id="running_low" name="running_low" style="width:30%;"></label>
+      <label for="essential"><span>Essential</span><input type="checkbox" class="input-checkbox" id="essential"></label>
+      <label><span> </span><input type="submit" value="Submit"></label>
+    </form>`;
+  main.appendChild(div);
 }
 
 window.submitPantryItem = async function () {
@@ -54,7 +51,7 @@ window.submitPantryItem = async function () {
     showMessage("Amount must be a number or none", false);
     return false;
   }
-  const unit_options = document.getElementById("edit_unit");
+  const unit_options = document.getElementById(UNIT_ID);
   let unit = unit_options.options[unit_options.selectedIndex].text;
   let map = transformAmount(amount, unit);
 

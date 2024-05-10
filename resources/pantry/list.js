@@ -42,9 +42,9 @@ export function showPantryItems(query_params = null) {
         }
         if (item.expiration_date != null) {
           const days_left = daysLeft(item.expiration_date);
-          if (days_left < 7 && days_left > 2) {
+          if (days_left < 7 && days_left > 0) {
             color = 'style="background-color:	#f8ac30;"';
-          } else if (days_left <= 2) {
+          } else if (days_left <= 0) {
             color = 'style="background-color:	#eb5c3f;"';
           }
         }
