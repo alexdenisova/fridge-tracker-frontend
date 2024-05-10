@@ -10,57 +10,53 @@ import { unpressFilterButton } from "./filter.js";
 import { createTable } from "./ingredient_table.js";
 
 const ADD_RECIPE_BUTTON_ID = "add_recipe_button";
-const ADD_RECIPE_ID = "add_recipes_form";
+const ADD_ID = "add_recipes_form";
 const PARSED_INGREDIENTS_BUTTON_ID = "parse_ingredients_button";
 
 window.addRecipeButton = function (add_id) {
   if (clickButton(add_id) == "unpressed") {
-    hideElement(ADD_RECIPE_ID);
+    hideElement(ADD_ID);
     showElement(LIST_ID);
   } else {
     hideElement(LIST_ID);
     unpressFilterButton();
-    if (document.getElementById(ADD_RECIPE_ID) == null) {
+    if (document.getElementById(ADD_ID) == null) {
       addForm();
     } else {
-      showElement(ADD_RECIPE_ID, "block");
+      showElement(ADD_ID, "block");
     }
   }
 }
 
 export function unpressAddRecipeButton() {
   document.getElementById(ADD_RECIPE_BUTTON_ID).style.backgroundColor = "#b4d6b4";
-  if (document.getElementById(ADD_RECIPE_ID) != null) {
-    hideElement(ADD_RECIPE_ID);
+  if (document.getElementById(ADD_ID) != null) {
+    hideElement(ADD_ID);
   }
 }
 
 function addForm() {
-  const form = document.createElement("form");
-  form.setAttribute("onsubmit", "submitRecipe(); return false;");
-  form.setAttribute("id", ADD_RECIPE_ID);
-  form.innerHTML = `
-    <label for="recipe_name">Name*:</label>
-    <input type="text" id="recipe_name" name="recipe_name"><br>
-    <label for="link">Link:</label>
-    <input type="text" id="link" name="link">
-    <button id="parse-link-button" type="button" onclick="parseLink('link', 'parse-link-button')">Get Recipe from Link</button><br><br>
-    <label for="ingredients">Ingredients:</label><br>
-    <textarea id="parse-ingredients" name="ingredients"></textarea>
-    <button id="${PARSED_INGREDIENTS_BUTTON_ID}" type="button" onclick="parseIngredients('parse-ingredients', '${PARSED_INGREDIENTS_BUTTON_ID}')">Parse Ingredients</button><br><br>
-    <label for="prep_time_mins">Prep Time:<input type="text" id="prep_time_mins" name="prep_time_mins">mins</label><br>
-    <label for="total_time_mins">Total Time:<input type="text" id="total_time_mins" name="total_time_mins">mins</label><br>
-    <label for="instructions">Instructions:</label><br>
-    <textarea id="instructions" name="instructions"></textarea><br>
-    <label for="image">Image Link:</label>
-    <input type="text" id="image" name="image"><br>
-    <label for="last_cooked">Last Cooked:</label>
-    <input type="text" id="last_cooked" name="last_cooked"><br>
-    <label for="rating">Rating: <input type="text" id="rating" name="rating">⭐</label><br>
-    <label for="notes">Notes:</label>
-    <input type="text" id="notes" name="notes">
-    <input type="submit" value="Submit" style="width:50%;height:100%;">`
-  main.appendChild(form);
+  const div = document.createElement("div");
+  div.setAttribute("class", "form");
+  div.setAttribute("id", ADD_ID);
+  div.innerHTML = `
+    <div class="form-heading">Provide recipe information</div>
+    <form onsubmit="submitRecipe(); return false;">
+      <label for="recipe_name"><span>Name<span class="required">*</span></span><input type="text" class="input-field" id="recipe_name" name="recipe_name"></label>
+      <label for="link"><span>Link</span><input type="text" class="input-field" id="link" name="link"></label>
+      <button id="parse-link-button" class="parse" type="button" onclick="parseLink('link', 'parse-link-button')">Get Recipe from Link</button><br><br>
+      <label for="ingredients"><span>Ingredients <span class="required">*</span></span><textarea id="ingredients" name="ingredients" class="textarea-field"></textarea></label>
+      <button id="${PARSED_INGREDIENTS_BUTTON_ID}" class="parse" type="button" onclick="parseIngredients('parse-ingredients', '${PARSED_INGREDIENTS_BUTTON_ID}')">Parse Ingredients</button><br><br>
+      <label for="prep_time_mins"><span>Prep Time (mins)</span><input type="text" class="input-field" id="prep_time_mins" name="prep_time_mins"></label>
+      <label for="total_time_mins"><span>Total Time (mins)</span><input type="text" class="input-field" id="total_time_mins" name="total_time_mins"></label>
+      <label for="instructions"><span>Instructions <span class="required">*</span></span><textarea id="instructions" name="instructions" class="textarea-field"></textarea></label>
+      <label for="image"><span>Image Link</span><input type="text" class="input-field" id="image" name="image"></label>
+      <label for="last_cooked"><span>Last Cooked</span><input type="date" class="input-field" id="last_cooked" name="last_cooked" placeholder="YYYY-MM-DD"></label>
+      <label for="rating"><span>Rating</span><input type="text" class="input-field" id="rating" name="rating"></label>
+      <label for="notes"><span>Notes</span><textarea id="notes" name="notes" class="textarea-field"></textarea></label>
+      <input type="submit" value="Submit">
+    </form>`;
+  main.appendChild(div);
 }
 
 window.submitRecipe = async function () {

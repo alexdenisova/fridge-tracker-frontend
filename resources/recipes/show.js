@@ -19,22 +19,11 @@ export function showRecipe(item_id) {
       showMessageThenRedirect("Could not get recipe.", false, "index.html");
       return false;
     }
-    const form = document.createElement('form');
-    form.setAttribute("id", CHANGE_ID);
+    const div = document.createElement("div");
+    div.setAttribute("class", "form");
+    div.setAttribute("id", CHANGE_ID);
 
     const recipe = await response.json();
-    let inner_html = `<p class="title" id="name">${recipe.name}</p>
-      <p class="detail">Rating: <input type="text" id="rating" value="${recipe.rating || ""}">⭐</p>
-      <p class="detail">Last Cooked: <input type="text" id="last_cooked" value="${recipe.last_cooked || ""}"></p>
-      <p class="detail">Notes:</p>
-      <textarea id="notes">${recipe.notes || ""}</textarea>
-      <p class="detail">Link: <input type="text" id="link" value="${recipe.link || ""}"></p>
-      <p class="detail">Prep Time: <input type="text" id="prep_time" value="${recipe.prep_time_mins || ""}">mins</p>
-      <p class="detail">Total Time: <input type="text" id="total_time" value="${recipe.total_time_mins || ""}">mins</p>
-      <p class="detail">Instructions:</p>
-      <textarea id="instructions">${recipe.instructions || ""}</textarea>
-      <p class="detail">Image Link: <input type="text" id="image" value="${recipe.image || ""}"></p>`;
-
     const ingredient_response = await listRecipeIngredients(recipe.id);
     if (!response.ok) {
       if (response.status == 401) {
@@ -52,12 +41,24 @@ export function showRecipe(item_id) {
       parsed_ingredients.push({ 'amount': amount, 'unit': unit, 'name': name, 'optional': optional });
     }
 
-    inner_html += createTable(parsed_ingredients);
-
-    inner_html += `<br><button type="button" id="${SAVE_ID}" onclick="saveRecipe('${item_id}');" value="Save" style="width:20%;height:100%;">Save</button>
-    <button type="button" id="${DELETE_ID}" onclick="removeRecipe('${item_id}');" value="Delete" style="width:20%;height:100%;">Delete</button>`;
-    form.innerHTML = inner_html;
-    main.appendChild(form);
+    div.innerHTML = `
+    <div class="form-heading">${recipe.name}</div>
+      <form>
+        <label for="recipe_name"><span>Recipe Name<span class="required">*</span></span><input type="text" class="input-field" id="recipe_name" name="recipe_name" value="${recipe.name}"></label>
+        <label for="rating"><span>Rating</span><input type="text" class="input-field" id="rating" name="rating" value="${recipe.rating || ""}"></label>
+        <label for="last_cooked"><span>Last Cooked</span><input type="date" class="input-field" id="last_cooked" name="last_cooked" placeholder="YYYY-MM-DD" value="${recipe.last_cooked || ""}"></label>
+        <label for="notes"><span>Notes</span><textarea id="notes" name="notes" class="textarea-field">${recipe.notes || ""}</textarea></label>
+        <label for="link"><span>Link</span><input type="text" class="input-field" id="link" name="link" value="${recipe.link || ""}"></label>
+        <label for="prep_time_mins"><span>Prep Time (mins)</span><input type="text" class="input-field" id="prep_time_mins" name="prep_time_mins" value="${recipe.prep_time_mins || ""}"></label>
+        <label for="total_time_mins"><span>Total Time (mins)</span><input type="text" class="input-field" id="total_time_mins" name="total_time_mins" value="${recipe.total_time_mins || ""}"></label>
+        <label for="instructions"><span>Instructions <span class="required">*</span></span><textarea id="instructions" name="instructions" class="textarea-field">${recipe.instructions || ""}</textarea></label>
+        <label for="image"><span>Image Link</span><input type="text" class="input-field" id="image" name="image" value="${recipe.image || ""}"></label>
+        <label for="ingredients"><span>Ingredients<span class="required">*</span></span></label>
+        ${createTable(parsed_ingredients)}<br><br>
+        <button type="button" id="${SAVE_ID}" onclick="saveRecipe('${item_id}');" value="Save" style="width:20%;height:100%;">Save</button>
+        <button type="button" id="${DELETE_ID}" onclick="removeRecipe('${item_id}');" value="Delete" style="width:20%;height:100%;">Delete</button>
+      </form>`;
+    main.appendChild(div);
   });
 }
 
@@ -75,7 +76,7 @@ window.removeRecipe = async function (item_id) {
 }
 
 window.saveRecipe = async function (item_id) {
-  const name = document.getElementById('name').innerText;
+  const name = document.getElementById('recipe_name').value;
   const link = getOrNull(document.getElementById('link'), "value");
   const prep_time = getOrNull(document.getElementById('prep_time'), "value");
   const total_time = getOrNull(document.getElementById('total_time'), "value");

@@ -26,7 +26,7 @@ function addForm() {
   div.setAttribute("id", ADD_ID);
   const select = unitOptions();
   div.innerHTML = `
-    <div class="form-heading">Provide recipe information</div>
+    <div class="form-heading">Provide pantry item information</div>
     <form onsubmit="submitPantryItem(); return false;">
       <label for="ingredient_name"><span>Ingredient Name<span class="required">*</span></span><input type="text" class="input-field" id="ingredient_name" name="ingredient_name"></label>
       <label for="purchase_date"><span>Purchase Date</span><input type="date" class="input-field" id="purchase_date" name="purchase_date" placeholder="YYYY-MM-DD"></label>

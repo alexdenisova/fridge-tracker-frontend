@@ -48,13 +48,13 @@ button {
   padding: 10px 10px 50px 10px;
 }
 
-form {
+/* form {
   width: 400px;
   height: 30px;
   border-radius: 11px;
-}
+} */
 
-input {
+/* input {
   font: 15px system-ui;
   height: 60%;
   width: 60%;
@@ -62,7 +62,7 @@ input {
   border: 1px solid;
   margin-bottom: 5px;
   margin-top: 5px;
-}
+} */
 
 .title {
   text-decoration: none;

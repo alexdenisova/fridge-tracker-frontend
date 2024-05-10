@@ -90,6 +90,11 @@
     -moz-border-radius: 3px;
 }
 
+.form .parse {
+    margin-left: 23%;
+    padding: 5px 10px 5px 10px;
+}
+
 .form input[type=submit]:hover,
 .form input[type=button]:hover,
 .form button:hover {
