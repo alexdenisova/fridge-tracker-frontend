@@ -29,7 +29,7 @@ export async function listRecipes(query_params = null) {
   });
 }
 
-export async function postRecipe(name, cooking_time_mins = null, link = null, instructions = null, image = null) {
+export async function postRecipe(name, prep_time_mins = null, total_time_mins = null, link = null, instructions = null, image = null, last_cooked = null, rating = null, notes = null) {
   return await fetch(RECIPE_ENDPOINT, {
     method: 'POST',
     headers: {
@@ -38,10 +38,14 @@ export async function postRecipe(name, cooking_time_mins = null, link = null, in
     },
     body: JSON.stringify({
       "name": name,
-      ...cooking_time_mins && { 'cooking_time_mins': Number(cooking_time_mins) },
+      ...prep_time_mins && { 'prep_time_mins': Number(prep_time_mins) },
+      ...total_time_mins && { 'total_time_mins': Number(total_time_mins) },
       ...link && { 'link': link },
       ...instructions && { 'instructions': instructions },
       ...image && { 'image': image },
+      ...last_cooked && { 'last_cooked': last_cooked },
+      ...rating && { 'rating': rating },
+      ...notes && { 'notes': notes },
     })
   }).then(response => {
     return response;
@@ -60,7 +64,7 @@ export async function deleteRecipe(id) {
   });
 }
 
-export async function putRecipe(id, name, cooking_time_mins = null, link = null, instructions = null, image = null) {
+export async function putRecipe(id, name, prep_time_mins = null, total_time_mins = null, link = null, instructions = null, image = null, last_cooked = null, rating = null, notes = null) {
   return await fetch(RECIPE_ENDPOINT + "/" + id, {
     method: 'PUT',
     headers: {
@@ -69,10 +73,14 @@ export async function putRecipe(id, name, cooking_time_mins = null, link = null,
     },
     body: JSON.stringify({
       "name": name,
-      ...cooking_time_mins && { 'cooking_time_mins': Number(cooking_time_mins) },
+      ...prep_time_mins && { 'prep_time_mins': Number(prep_time_mins) },
+      ...total_time_mins && { 'total_time_mins': Number(total_time_mins) },
       ...link && { 'link': link },
       ...instructions && { 'instructions': instructions },
       ...image && { 'image': image },
+      ...last_cooked && { 'last_cooked': last_cooked },
+      ...rating && { 'rating': rating },
+      ...notes && { 'notes': notes },
     })
   }).then(response => {
     return response;

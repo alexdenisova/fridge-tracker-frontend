@@ -48,11 +48,17 @@ function addForm() {
     <label for="ingredients">Ingredients:</label><br>
     <textarea id="parse-ingredients" name="ingredients"></textarea>
     <button id="${PARSED_INGREDIENTS_BUTTON_ID}" type="button" onclick="parseIngredients('parse-ingredients', '${PARSED_INGREDIENTS_BUTTON_ID}')">Parse Ingredients</button><br><br>
-    <label for="cooking_time_mins">Cooking Time:<input type="text" id="cooking_time_mins" name="cooking_time_mins">mins</label><br>
+    <label for="prep_time_mins">Prep Time:<input type="text" id="prep_time_mins" name="prep_time_mins">mins</label><br>
+    <label for="total_time_mins">Total Time:<input type="text" id="total_time_mins" name="total_time_mins">mins</label><br>
     <label for="instructions">Instructions:</label><br>
     <textarea id="instructions" name="instructions"></textarea><br>
     <label for="image">Image Link:</label>
     <input type="text" id="image" name="image"><br>
+    <label for="last_cooked">Last Cooked:</label>
+    <input type="text" id="last_cooked" name="last_cooked"><br>
+    <label for="rating">Rating: <input type="text" id="rating" name="rating">⭐</label><br>
+    <label for="notes">Notes:</label>
+    <input type="text" id="notes" name="notes">
     <input type="submit" value="Submit" style="width:50%;height:100%;">`
   main.appendChild(form);
 }
@@ -60,11 +66,15 @@ function addForm() {
 window.submitRecipe = async function () {
   const name = document.getElementById('recipe_name').value;
   const link = document.getElementById('link').value;
-  const cooking_time_mins = document.getElementById('cooking_time_mins').value;
+  const prep_time_mins = document.getElementById('prep_time_mins').value;
+  const total_time_mins = document.getElementById('total_time_mins').value;
   const instructions = document.getElementById('instructions').value;
   const image = document.getElementById('image').value;
+  const last_cooked = document.getElementById('last_cooked').value;
+  const rating = document.getElementById('rating').value;
+  const notes = document.getElementById('notes').value;
 
-  const response = await postRecipe(name, cooking_time_mins, link, instructions, image);
+  const response = await postRecipe(name, prep_time_mins, total_time_mins, link, instructions, image, last_cooked, rating, notes);
   if (response.ok) {
     const data = await response.json();
     const all_ingredients_added = await postRecipeIngredients(data.id);
@@ -86,7 +96,7 @@ async function postRecipeIngredients(recipe_id) {
   const table = document.getElementById(INGREDIENT_TABLE_ID);
 
   let all_ingredients_added = true;
-  for (var i = 0; i < table.children[1].childElementCount - 1; i++) {
+  for (var i = 0; i < table.children[1].childElementCount; i++) {
     const tr_id = table.children[1].children[i].id;
     let amount = document.getElementById(tr_id + "-0").value;
     let unit = document.getElementById(tr_id + "-1").value;
@@ -120,7 +130,8 @@ window.parseLink = function (link_id, button_id) {
       const data = await response.json();
 
       document.getElementById('recipe_name').value = data.name;
-      document.getElementById('cooking_time_mins').value = data.cooking_time_mins;
+      document.getElementById('prep_time_mins').value = data.prep_time_mins;
+      document.getElementById('total_time_mins').value = data.total_time_mins;
       document.getElementById('instructions').value = data.instructions;
       document.getElementById('image').value = data.image;
       createIngredientsTable(data.ingredients);

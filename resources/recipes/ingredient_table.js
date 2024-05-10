@@ -41,11 +41,18 @@ export function addIngredientRow(amount = "", unit = "", name = "", optional = f
     checked = "checked='checked'";
   }
   tr.innerHTML = `
-      <td><input type="text" id="${tr_id}-0" value="${amount}" style="width:65%"></td>
-      <td><input type="text" id="${tr_id}-1" value="${unit}" style="width:75%"></td>
-      <td><input type="text" id="${tr_id}-2" value="${name}" style="width:94%"></td>
+      <td><input type="text" id="${tr_id}-0" value="${nullToEmpty(amount)}" style="width:65%"></td>
+      <td><input type="text" id="${tr_id}-1" value="${nullToEmpty(unit)}" style="width:75%"></td>
+      <td><input type="text" id="${tr_id}-2" value="${nullToEmpty(name)}" style="width:94%"></td>
       <td><input type="checkbox" id="${tr_id}-3" ${checked}></td>
       <td><img src="http://findicons.com/files/icons/1715/gion/24/dialog_cancel.png"
       onclick='removeElement("${tr_id}")'></td>`;
   return tr;
+}
+
+function nullToEmpty(str) {
+  if (str == null) {
+    return "";
+  }
+  return str;
 }

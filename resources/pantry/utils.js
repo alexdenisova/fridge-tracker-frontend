@@ -3,7 +3,7 @@ import { UNIT_OPTIONS } from "./constants";
 // creates unit select button
 export function unitOptions() {
   const select = document.createElement('select');
-  select.setAttribute("id", "edit_unit");
+  select.setAttribute("id", "unit");
   for (let i = 0; i < UNIT_OPTIONS.length; i++) {
     const opt = document.createElement('option');
     opt.value = UNIT_OPTIONS[i];

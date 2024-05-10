@@ -1,5 +1,5 @@
 import { getIngredientName, makeIngredientIfNotExists } from "../backend/ingredients.js";
-import { listRecipeIngredients, postRecipeIngredient } from "../backend/recipe_ingredients.js";
+import { deleteRecipeIngredient, listRecipeIngredients, postRecipeIngredient } from "../backend/recipe_ingredients.js";
 import { deleteRecipe, getRecipe, putRecipe } from "../backend/recipes.js";
 import { getOrNull, showMessage, showMessageThenRedirect } from "../utils.js";
 import { INGREDIENT_TABLE_ID, main } from "./constants.js";
@@ -23,12 +23,17 @@ export function showRecipe(item_id) {
     form.setAttribute("id", CHANGE_ID);
 
     const recipe = await response.json();
-    let inner_html = `<p class="title" id="edit_name">${recipe.name}</p>
-      <p class="detail">Link: <input type="text" id="edit_link" value="${recipe.link || ""}"></p>
-      <p class="detail">Cooking Time: <input type="text" id="edit_cooking_time" value="${recipe.cooking_time_mins || ""}">mins</p>
+    let inner_html = `<p class="title" id="name">${recipe.name}</p>
+      <p class="detail">Rating: <input type="text" id="rating" value="${recipe.rating || ""}">⭐</p>
+      <p class="detail">Last Cooked: <input type="text" id="last_cooked" value="${recipe.last_cooked || ""}"></p>
+      <p class="detail">Notes:</p>
+      <textarea id="notes">${recipe.notes || ""}</textarea>
+      <p class="detail">Link: <input type="text" id="link" value="${recipe.link || ""}"></p>
+      <p class="detail">Prep Time: <input type="text" id="prep_time" value="${recipe.prep_time_mins || ""}">mins</p>
+      <p class="detail">Total Time: <input type="text" id="total_time" value="${recipe.total_time_mins || ""}">mins</p>
       <p class="detail">Instructions:</p>
-      <textarea id="edit_instructions">${recipe.instructions || ""}</textarea>
-      <p class="detail">Image Link: <input type="text" id="edit_image" value="${recipe.image || ""}"></p>`;
+      <textarea id="instructions">${recipe.instructions || ""}</textarea>
+      <p class="detail">Image Link: <input type="text" id="image" value="${recipe.image || ""}"></p>`;
 
     const ingredient_response = await listRecipeIngredients(recipe.id);
     if (!response.ok) {
@@ -70,13 +75,17 @@ window.removeRecipe = async function (item_id) {
 }
 
 window.saveRecipe = async function (item_id) {
-  const name = document.getElementById('edit_name').innerText;
-  const link = getOrNull(document.getElementById('edit_link'), "value");
-  const cooking_time = getOrNull(document.getElementById('edit_cooking_time'), "value");
-  const instructions = getOrNull(document.getElementById('edit_instructions'), "value");
-  const image = getOrNull(document.getElementById('edit_image'), "value");
+  const name = document.getElementById('name').innerText;
+  const link = getOrNull(document.getElementById('link'), "value");
+  const prep_time = getOrNull(document.getElementById('prep_time'), "value");
+  const total_time = getOrNull(document.getElementById('total_time'), "value");
+  const instructions = getOrNull(document.getElementById('instructions'), "value");
+  const image = getOrNull(document.getElementById('image'), "value");
+  const last_cooked = document.getElementById('last_cooked').value;
+  const rating = Number(document.getElementById('rating').value);
+  const notes = document.getElementById('notes').value;
 
-  const response = await putRecipe(item_id, name, cooking_time, link, instructions, image);
+  const response = await putRecipe(item_id, name, prep_time, total_time, link, instructions, image, last_cooked, rating, notes);
   if (response.ok) {
     const data = await response.json();
     const all_ingredients_added = await postOrPutRecipeIngredients(data.id);
@@ -113,10 +122,10 @@ async function postOrPutRecipeIngredients(recipe_id) {
   const table = document.getElementById(INGREDIENT_TABLE_ID);
 
   let all_ingredients_added = true;
-  for (var i = 0; i < table.children[1].childElementCount - 1; i++) {
+  for (var i = 0; i < table.children[1].childElementCount; i++) {
     const tr_id = table.children[1].children[i].id;
-    let amount = document.getElementById(tr_id + "-0").value;
-    let unit = document.getElementById(tr_id + "-1").value;
+    let amount = getOrNull(document.getElementById(tr_id + "-0"), "value");
+    let unit = getOrNull(document.getElementById(tr_id + "-1"), "value");
     let name = document.getElementById(tr_id + "-2").value;
     let optional = document.getElementById(tr_id + "-3").checked;
     const ingredient_id = await makeIngredientIfNotExists(name);
