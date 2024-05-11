@@ -8,14 +8,14 @@ const search = document.getElementById("query");
 
 // showPantryItems();
 
-// search_container.addEventListener("submit", (e) => {
-//   e.preventDefault();
-//   main.innerHTML = '';
+search_container.addEventListener("submit", (e) => {
+  e.preventDefault();
+  main.innerHTML = '';
 
-//   const searchItem = search.value;
+  const searchItem = search.value;
 
-//   if (searchItem) {
-//     showPantryItems(`name_contains=${searchItem}`);
-//     search.value = "";
-//   }
-// });
+  if (searchItem) {
+    showPantryItems(`name_contains=${searchItem}`);
+    search.value = "";
+  }
+});
