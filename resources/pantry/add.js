@@ -55,15 +55,15 @@ window.submitPantryItem = async function () {
   let unit = unit_options.options[unit_options.selectedIndex].text;
   let map = transformAmount(amount, unit);
 
-  // const ingredient_id = await makeIngredientIfNotExists(name);
-  // let new_map = new Map(Object.entries({
-  //   ...purchase_date && { 'purchase_date': purchase_date },
-  //   ...expiration_date && { 'expiration_date': expiration_date },
-  //   ...ingredient_id && { 'ingredient_id': ingredient_id },
-  //   ...running_low && { 'running_low': Number(running_low) },
-  //   'essential': essential,
-  // }));
-  // map = new Map([...map, ...new_map])
+  const ingredient_id = await makeIngredientIfNotExists(name);
+  let new_map = new Map(Object.entries({
+    ...purchase_date && { 'purchase_date': purchase_date },
+    ...expiration_date && { 'expiration_date': expiration_date },
+    ...ingredient_id && { 'ingredient_id': ingredient_id },
+    ...running_low && { 'running_low': Number(running_low) },
+    'essential': essential,
+  }));
+  map = new Map([...map, ...new_map])
 
   // const response = await postPantryItem(map);
   // if (response.ok) {
