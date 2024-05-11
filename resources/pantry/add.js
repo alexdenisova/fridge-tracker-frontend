@@ -6,19 +6,19 @@ import { transformAmount, unitOptions } from "./utils.js";
 
 export const ADD_ID = "add_pantry_item_form";
 
-// window.addPantryItemButton = function (add_id) {
-//   if (clickButton(add_id) == "unpressed") {
-//     hideElement(ADD_ID);
-//     showElement(LIST_ID);
-//   } else {
-//     hideElement(LIST_ID);
-//     if (document.getElementById(ADD_ID) == null) {
-//       addForm();
-//     } else {
-//       showElement(ADD_ID, "block");
-//     }
-//   }
-// }
+window.addPantryItemButton = function (add_id) {
+  if (clickButton(add_id) == "unpressed") {
+    hideElement(ADD_ID);
+    showElement(LIST_ID);
+  } else {
+    hideElement(LIST_ID);
+    if (document.getElementById(ADD_ID) == null) {
+      addForm();
+    } else {
+      showElement(ADD_ID, "block");
+    }
+  }
+}
 
 // function addForm() {
 //   const div = document.createElement("div");
