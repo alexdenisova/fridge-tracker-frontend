@@ -2,12 +2,17 @@ import { deleteLogin, postLogin } from "./backend/login.js";
 import { postUser } from "./backend/users.js";
 import { showMessage } from "./utils.js";
 
+const LOGIN_TITLE_ID = "login-title";
+const LOGIN_ERROR_ID = "login-error";
+const MAIN_BUTTON_ID = "main-button";
+const SECONDARY_BUTTON_ID = "secondary-button";
+
 window.login = async function (username_id, password_id) {
   const username = document.getElementById(username_id).value;
   const password = document.getElementById(password_id).value;
   const response = await postLogin(username, password);
   if (!response.ok) {
-    showMessage("Wrong username or password", false);
+    document.getElementById(LOGIN_ERROR_ID).style.visibility = "visible";
   }
   return false;
 }
@@ -17,10 +22,30 @@ window.createAccount = async function (username_id, password_id) {
   const password = document.getElementById(password_id).value;
   const response = await postUser(username, password);
   if (!response.ok) {
-    showMessage("Could not create account", false);
+    document.getElementById(LOGIN_ERROR_ID).style.visibility = "visible";
     return false;
   }
   return await login(username_id, password_id);
+}
+
+window.secondaryButton = async function () {
+  const login_msg = "Login Here";
+  const sign_up_msg = "Sign Up";
+  if (document.getElementById(LOGIN_TITLE_ID).innerText == login_msg) {
+    document.getElementById(LOGIN_TITLE_ID).innerText = sign_up_msg;
+    document.getElementById(MAIN_BUTTON_ID).innerText = sign_up_msg;
+    document.getElementById(MAIN_BUTTON_ID).setAttribute("onclick", "createAccount('username', 'password');");
+    document.getElementById(SECONDARY_BUTTON_ID).innerText = "Login";
+    document.getElementById('password').type = 'text';
+    document.getElementById(LOGIN_ERROR_ID).innerText = 'Username already exists.';
+  } else {
+    document.getElementById(LOGIN_TITLE_ID).innerText = login_msg;
+    document.getElementById(MAIN_BUTTON_ID).innerText = "Log In";
+    document.getElementById(MAIN_BUTTON_ID).setAttribute("onclick", "login('username', 'password');");
+    document.getElementById(SECONDARY_BUTTON_ID).innerText = "Sign up";
+    document.getElementById('password').type = 'password';
+    document.getElementById(LOGIN_ERROR_ID).innerText = 'Wrong username or password.';
+  }
 }
 
 window.demo = async function () {

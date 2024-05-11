@@ -1,33 +1,39 @@
-<!doctype html>
+<!-- https://codepen.io/fghty/pen/PojKNEG-->
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <title>Fridge Tracker Site</title>
-  <link rel="stylesheet" href="style.css">
+    <!-- Design by foolishdeveloper.com -->
+    <title>Pantry Tracker Site Login</title>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap">
+    <link rel="stylesheet" href="login.css">
+
 </head>
 
 <body>
+    <section id="section">
+        <div class="background">
+        </div>
+        <form>
+            <h3 id="login-title">Login Here</h3>
 
-  <section id="section">
-    <form>
-      <label for="username">username:</label>
-      <input type="text" id="username" name="username"><br>
-      <label for="password">password:</label>
-      <input type="text" id="password" name="password"><br>
-      <button type="button" value="Login" onclick="login('username', 'password');"
-        style="width:50%;height:100%;">Login</button>
-      <button type="button" value="Create Account" onclick="createAccount('username', 'password');"
-        style="width:50%;height:100%;">Create Account</button>
-        <button type="button" value="Demo" onclick="demo();"
-        style="width:50%;height:100%;">Demo</button>
-    </form>
-    <div id='message_parent' class="message_parent">
-      <div id='message' class="message"></div>
-      <img class="message_close" src="https://findicons.com/files/icons/1715/gion/24/dialog_cancel.png"
-        onclick='document.getElementById("message_parent").style.display = "none";'>
-    </div>
-  </section>
+            <div class="login-error"><span id="login-error">Wrong username or password.</span></div>
+            <label for="username" style="margin-top:0px;">Username</label>
+            <input type="text" placeholder="Username" id="username">
 
+            <label for="password">Password</label>
+            <input type="password" placeholder="Password" id="password">
+
+            <button type="button" id="main-button" onclick="login('username', 'password');">Log In</button>
+            <div class="social">
+                <div class="go" id="secondary-button" onclick="secondaryButton();"> Sign up</div>
+                <div class="fb" onclick="demo();"> Demo</div>
+            </div>
+        </form>
+    </section>
 </body>
 <script type="module" src="./resources/login.js"></script>
 

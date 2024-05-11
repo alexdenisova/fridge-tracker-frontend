@@ -1,7 +1,7 @@
 import { LOGIN_ENDPOINT } from "./constant";
 
 
-export async function postLogin(username, password=null) {
+export async function postLogin(username, password = null) {
   return await fetch(LOGIN_ENDPOINT, {
     method: 'POST',
     headers: {
