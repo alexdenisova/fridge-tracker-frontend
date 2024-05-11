@@ -19,6 +19,8 @@ module.exports = defineConfig({
         pantry: './pantry.html',
         pantry_item: './pantry_item.html',
         login: './login.html',
+        ingredients: './ingredients.html',
+        ingredient: './ingredient.html',
       }
     }
   }
