@@ -41,8 +41,8 @@ function addForm() {
 
 window.submitPantryItem = async function () {
   const name = document.getElementById('ingredient_name').value;
-  const purchase_date = document.getElementById('purchase_date').value;
-  const expiration_date = document.getElementById('expiration_date').value;
+  const purchase_date = getOrNull(document.getElementById('purchase_date'), "value");
+  const expiration_date = getOrNull(document.getElementById('expiration_date'), "value");
   const essential = document.getElementById('essential').checked;
 
   const amount = getOrNull(document.getElementById('amount'), "value");
@@ -56,23 +56,22 @@ window.submitPantryItem = async function () {
   let map = transformAmount(amount, unit);
 
   const ingredient_id = await makeIngredientIfNotExists(name);
-  let new_map = new Map(Object.entries({
-    ...purchase_date && { 'purchase_date': purchase_date },
-    ...expiration_date && { 'expiration_date': expiration_date },
-    ...ingredient_id && { 'ingredient_id': ingredient_id },
-    ...running_low && { 'running_low': Number(running_low) },
-    'essential': essential,
-  }));
-  map = new Map([...map, ...new_map])
+  map.set('purchase_date', purchase_date);
+  map.set('expiration_date', expiration_date);
+  map.set('ingredient_id', ingredient_id);
+  if (running_low != null) {
+    map.set('running_low', Number(running_low));
+  }
+  map.set('essential', essential);
 
-  // const response = await postPantryItem(map);
-  // if (response.ok) {
-  //   showMessageThenRedirect("Pantry item added successfully!", true, "pantry.html");
-  // } else {
-  //   if (response.status == 401) {
-  //     redirectToLogin();
-  //   }
-  //   showMessage("Failed to create pantry item!", false);
-  // }
+  const response = await postPantryItem(map);
+  if (response.ok) {
+    showMessageThenRedirect("Pantry item added successfully!", true, "pantry.html");
+  } else {
+    if (response.status == 401) {
+      redirectToLogin();
+    }
+    showMessage("Failed to create pantry item!", false);
+  }
   return false;
 }
