@@ -39,40 +39,40 @@ function addForm() {
   main.appendChild(div);
 }
 
-// window.submitPantryItem = async function () {
-//   const name = document.getElementById('ingredient_name').value;
-//   const purchase_date = document.getElementById('purchase_date').value;
-//   const expiration_date = document.getElementById('expiration_date').value;
-//   const essential = document.getElementById('essential').checked;
+window.submitPantryItem = async function () {
+  const name = document.getElementById('ingredient_name').value;
+  const purchase_date = document.getElementById('purchase_date').value;
+  const expiration_date = document.getElementById('expiration_date').value;
+  const essential = document.getElementById('essential').checked;
 
-//   const amount = getOrNull(document.getElementById('amount'), "value");
-//   const running_low = getOrNull(document.getElementById('running_low'), "value");
-//   if (isNaN(amount) && amount != null || isNaN(running_low) && running_low != null) {
-//     showMessage("Amount must be a number or none", false);
-//     return false;
-//   }
-//   const unit_options = document.getElementById(UNIT_ID);
-//   let unit = unit_options.options[unit_options.selectedIndex].text;
-//   let map = transformAmount(amount, unit);
+  const amount = getOrNull(document.getElementById('amount'), "value");
+  const running_low = getOrNull(document.getElementById('running_low'), "value");
+  if (isNaN(amount) && amount != null || isNaN(running_low) && running_low != null) {
+    showMessage("Amount must be a number or none", false);
+    return false;
+  }
+  const unit_options = document.getElementById(UNIT_ID);
+  let unit = unit_options.options[unit_options.selectedIndex].text;
+  let map = transformAmount(amount, unit);
 
-//   const ingredient_id = await makeIngredientIfNotExists(name);
-//   let new_map = new Map(Object.entries({
-//     ...purchase_date && { 'purchase_date': purchase_date },
-//     ...expiration_date && { 'expiration_date': expiration_date },
-//     ...ingredient_id && { 'ingredient_id': ingredient_id },
-//     ...running_low && { 'running_low': Number(running_low) },
-//     'essential': essential,
-//   }));
-//   map = new Map([...map, ...new_map])
+  const ingredient_id = await makeIngredientIfNotExists(name);
+  let new_map = new Map(Object.entries({
+    ...purchase_date && { 'purchase_date': purchase_date },
+    ...expiration_date && { 'expiration_date': expiration_date },
+    ...ingredient_id && { 'ingredient_id': ingredient_id },
+    ...running_low && { 'running_low': Number(running_low) },
+    'essential': essential,
+  }));
+  map = new Map([...map, ...new_map])
 
-//   const response = await postPantryItem(map);
-//   if (response.ok) {
-//     showMessageThenRedirect("Pantry item added successfully!", true, "pantry.html");
-//   } else {
-//     if (response.status == 401) {
-//       redirectToLogin();
-//     }
-//     showMessage("Failed to create pantry item!", false);
-//   }
-//   return false;
-// }
+  const response = await postPantryItem(map);
+  if (response.ok) {
+    showMessageThenRedirect("Pantry item added successfully!", true, "pantry.html");
+  } else {
+    if (response.status == 401) {
+      redirectToLogin();
+    }
+    showMessage("Failed to create pantry item!", false);
+  }
+  return false;
+}
