@@ -7,15 +7,6 @@ const LOGIN_ERROR_ID = "login-error";
 const MAIN_BUTTON_ID = "main-button";
 const SECONDARY_BUTTON_ID = "secondary-button";
 
-window.enterEventListener = function (event) {
-  if (event.key === "Enter") {
-    event.preventDefault();
-    document.getElementById(MAIN_BUTTON_ID).click();
-  }
-}
-document.getElementById('username').addEventListener("keypress", enterEventListener);
-document.getElementById('password').addEventListener("keypress", enterEventListener);
-
 window.login = async function (username_id, password_id) {
   const username = document.getElementById(username_id).value;
   const password = document.getElementById(password_id).value;
