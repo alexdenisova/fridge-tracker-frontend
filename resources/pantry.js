@@ -1,7 +1,7 @@
 import "./pantry/add.js";
 import { main } from "./pantry/constants.js";
 // import { showPantryItems } from "./pantry/list.js";
-// import "./pantry/show.js";
+import "./pantry/show.js";
 
 const search_container = document.getElementById("search-container");
 const search = document.getElementById("query");
