@@ -1,5 +1,6 @@
 import "./recipes/ingredient_table.js";
-import { showRecipe } from "./recipes/show";
+import { showRecipe } from "./recipes/show.js";
+import './recipes/utils.js';
 
 const url = new URL(location.href);
 const recipe_id = url.searchParams.get("id")

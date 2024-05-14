@@ -23,7 +23,7 @@ export function createTable(parsed_ingredients) {
   add_ingredient_button.innerHTML = `Add Ingredient`;
   add_ingredient_button.setAttribute("onclick", `addIngredientRow()`);
   parsed_ingredients.forEach(ingredient => {
-    table.appendChild(addIngredientRow(ingredient.amount, ingredient.unit, ingredient.name, ingredient.optional));
+    table.appendChild(addIngredientRow(ingredient.amount, ingredient.unit, ingredient.name.trim(), ingredient.optional));
   });
 
   let inner_html = table.outerHTML;

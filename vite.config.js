@@ -1,15 +1,5 @@
 const { defineConfig } = require('vite')
 
-// export default {
-//   server: {
-//     port: 5173,
-//     strictPort: true,
-//     hmr: {
-//       port: 5173,
-//     },
-//   },
-// }
-
 module.exports = defineConfig({
   build: {
     rollupOptions: {
@@ -23,5 +13,12 @@ module.exports = defineConfig({
         ingredient: './ingredient.html',
       }
     }
-  }
+  },
+  server: {
+    port: 5173,
+    strictPort: true,
+    hmr: {
+      port: 5173,
+    },
+  },
 })

@@ -19,7 +19,7 @@
     margin: 0px 0px 15px 0px;
 }
 
-.form label>span {
+.form label>span:not(.fa-star) {
     width: 110px;
     font-weight: bold;
     float: left;
@@ -100,4 +100,8 @@
 .form button:hover {
     background: #2d6a6b;
     color: #fff;
+}
+
+.checked {
+    color: orange;
 }

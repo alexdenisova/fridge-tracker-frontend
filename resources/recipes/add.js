@@ -6,6 +6,7 @@ import { postRecipe } from "../backend/recipes.js";
 import { clickButton, hideElement, redirectToLogin, showElement, showMessage, showMessageThenRedirect } from "../utils.js";
 import { INGREDIENT_TABLE_ID, LIST_ID, main } from "./constants.js";
 import { unpressFilterButton } from "./filter.js";
+import { createStar, getRating } from './utils.js';
 
 import { createTable } from "./ingredient_table.js";
 
@@ -52,7 +53,7 @@ function addForm() {
       <label for="instructions"><span>Instructions <span class="required">*</span></span><textarea id="instructions" name="instructions" class="textarea-field"></textarea></label>
       <label for="image"><span>Image Link</span><input type="text" class="input-field" id="image" name="image"></label>
       <label for="last_cooked"><span>Last Cooked</span><input type="date" class="input-field" id="last_cooked" name="last_cooked" placeholder="YYYY-MM-DD"></label>
-      <label for="rating"><span>Rating</span><input type="text" class="input-field" id="rating" name="rating"></label>
+      <label for="rating"><span>Rating</span>${createStar(0)}</label>
       <label for="notes"><span>Notes</span><textarea id="notes" name="notes" class="textarea-field"></textarea></label>
       <input type="submit" value="Submit">
     </form>`;
@@ -67,7 +68,10 @@ window.submitRecipe = async function () {
   const instructions = document.getElementById('instructions').value;
   const image = document.getElementById('image').value;
   const last_cooked = document.getElementById('last_cooked').value;
-  const rating = document.getElementById('rating').value;
+  let rating = getRating();
+  if (rating == 0) {
+    rating = null;
+  }
   const notes = document.getElementById('notes').value;
 
   const response = await postRecipe(name, prep_time_mins, total_time_mins, link, instructions, image, last_cooked, rating, notes);
@@ -98,7 +102,7 @@ async function postRecipeIngredients(recipe_id) {
     let unit = document.getElementById(tr_id + "-1").value;
     let name = document.getElementById(tr_id + "-2").value;
     let optional = document.getElementById(tr_id + "-3").checked;
-    const ingredient_id = await makeIngredientIfNotExists(name);
+    const ingredient_id = await makeIngredientIfNotExists(name.trim());
     const response = await postRecipeIngredient(recipe_id, ingredient_id, optional, amount, unit);
     if (!response.ok) {
       if (response.status == 401) {

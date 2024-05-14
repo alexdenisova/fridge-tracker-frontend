@@ -4,6 +4,7 @@ import { deleteRecipe, getRecipe, putRecipe } from "../backend/recipes.js";
 import { getOrNull, showMessage, showMessageThenRedirect } from "../utils.js";
 import { INGREDIENT_TABLE_ID, main } from "./constants.js";
 import { createTable } from './ingredient_table.js';
+import { createStar, getRating } from './utils.js';
 
 const CHANGE_ID = "change_recipe";
 const SAVE_ID = "save_recipe";
@@ -45,7 +46,7 @@ export function showRecipe(item_id) {
     <div class="form-heading">${recipe.name}</div>
       <form>
         <label for="recipe_name"><span>Recipe Name<span class="required">*</span></span><input type="text" class="input-field" id="recipe_name" name="recipe_name" value="${recipe.name}"></label>
-        <label for="rating"><span>Rating</span><input type="text" class="input-field" id="rating" name="rating" value="${recipe.rating || ""}"></label>
+        <label for="rating"><span>Rating</span>${createStar(recipe.rating)}</label>
         <label for="last_cooked"><span>Last Cooked</span><input type="date" class="input-field" id="last_cooked" name="last_cooked" placeholder="YYYY-MM-DD" value="${recipe.last_cooked || ""}"></label>
         <label for="notes"><span>Notes</span><textarea id="notes" name="notes" class="textarea-field">${recipe.notes || ""}</textarea></label>
         <label for="link"><span>Link</span><input type="text" class="input-field" id="link" name="link" value="${recipe.link || ""}"></label>
@@ -83,7 +84,10 @@ window.saveRecipe = async function (item_id) {
   const instructions = getOrNull(document.getElementById('instructions'), "value");
   const image = getOrNull(document.getElementById('image'), "value");
   const last_cooked = document.getElementById('last_cooked').value;
-  const rating = Number(document.getElementById('rating').value);
+  let rating = getRating();
+  if (rating == 0) {
+    rating = null;
+  }
   const notes = document.getElementById('notes').value;
 
   const response = await putRecipe(item_id, name, prep_time, total_time, link, instructions, image, last_cooked, rating, notes);
