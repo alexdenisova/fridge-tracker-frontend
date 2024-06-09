@@ -42,7 +42,7 @@ function addForm() {
   div.setAttribute("id", ADD_ID);
   div.innerHTML = `
     <div class="form-heading">Provide recipe information</div>
-    <form onsubmit="submitRecipe(); return false;">
+    <form>
       <label for="recipe_name"><span>Name<span class="required">*</span></span><input type="text" class="input-field" id="recipe_name" name="recipe_name"></label>
       <label for="link"><span>Link</span><input type="text" class="input-field" id="link" name="link"></label>
       <button id="parse-link-button" class="parse" type="button" onclick="parseLink('link', 'parse-link-button')">Get Recipe from Link</button><br><br>
@@ -55,7 +55,7 @@ function addForm() {
       <label for="last_cooked"><span>Last Cooked</span><input type="date" class="input-field" id="last_cooked" name="last_cooked" placeholder="YYYY-MM-DD"></label>
       <label for="rating"><span>Rating</span>${createStar(0)}</label>
       <label for="notes"><span>Notes</span><textarea id="notes" name="notes" class="textarea-field"></textarea></label>
-      <input type="submit" value="Submit">
+      <button type="button" onclick="submitRecipe();" value="Submit">Submit</button>
     </form>`;
   main.appendChild(div);
 }

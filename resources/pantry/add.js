@@ -27,14 +27,14 @@ function addForm() {
   const select = unitOptions();
   div.innerHTML = `
     <div class="form-heading">Provide pantry item information</div>
-    <form onsubmit="submitPantryItem(); return false;">
+    <form>
       <label for="ingredient_name"><span>Ingredient Name<span class="required">*</span></span><input type="text" class="input-field" id="ingredient_name" name="ingredient_name"></label>
       <label for="purchase_date"><span>Purchase Date</span><input type="date" class="input-field" id="purchase_date" name="purchase_date" placeholder="YYYY-MM-DD"></label>
       <label for="expiration_date"><span>Expiraton Date</span><input type="date" class="input-field" id="expiration_date" name="expiration_date" placeholder="YYYY-MM-DD"></label>
       <label for="amount"><span>Amount</span><input type="text" class="input-field" id="amount" name="amount" style="width:30%;">${select.outerHTML}</label>
       <label for="running_low"><span>Running low at</span><input type="text" class="input-field" id="running_low" name="running_low" style="width:30%;"></label>
       <label for="essential"><span>Essential</span><input type="checkbox" class="input-checkbox" id="essential"></label>
-      <label><span> </span><input type="submit" value="Submit"></label>
+      <button type="button" onclick="submitPantryItem();" value="Submit">Submit</button>
     </form>`;
   main.appendChild(div);
 }
