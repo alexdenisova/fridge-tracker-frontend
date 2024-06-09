@@ -47,7 +47,6 @@ export function showPantryItem(item_id) {
     div.innerHTML = `
       <div class="form-heading" id="ingredient_name">${ingredient.name}</div>
       <form id="${CHANGE_ID}">
-        <label for="purchase_date"><span>Purchase Date</span><input type="date" class="input-field" id="purchase_date" name="purchase_date" placeholder="YYYY-MM-DD" value="${data.purchase_date || ""}"></label>
         <label for="expiration_date"><span>Expiraton Date</span><input type="date" class="input-field" id="expiration_date" name="expiration_date" placeholder="YYYY-MM-DD" value="${data.expiration_date || ""}"></label>
         <label for="amount"><span>Amount</span><input type="text" class="input-field" id="amount" name="amount" style="width:30%;" value="${amount}">${select.outerHTML}</label>
         <label for="running_low"><span>Running low at</span><input type="text" class="input-field" id="running_low" name="running_low" style="width:30%;" value="${data.running_low || ""}"></label>
@@ -84,13 +83,11 @@ window.savePantryItem = async function (item_id) {
   let map = transformAmount(amount, unit);
 
   const ingredient_name = document.getElementById('ingredient_name').innerText;
-  const purchase_date = getOrNull(document.getElementById('purchase_date'), "value");
   const expiration_date = getOrNull(document.getElementById('expiration_date'), "value");
   const essential = document.getElementById('essential').checked;
 
   const ingredient_id = await makeIngredientIfNotExists(ingredient_name);
   let new_map = new Map(Object.entries({
-    ...purchase_date && { 'purchase_date': purchase_date },
     ...expiration_date && { 'expiration_date': expiration_date },
     ...ingredient_id && { 'ingredient_id': ingredient_id },
     ...running_low && { 'running_low': Number(running_low) },

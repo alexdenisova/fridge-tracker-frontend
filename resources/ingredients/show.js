@@ -98,7 +98,6 @@ window.saveIngredient = async function (item_id) {
     for (const ing of pantry_items.items) {
       let map = new Map(Object.entries({
         "ingredient_id": parent_id,
-        'purchase_date': ing.purchase_date,
         'expiration_date': ing.expiration_date,
         'running_low': ing.running_low,
         'quantity': ing.quantity,

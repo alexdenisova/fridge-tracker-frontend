@@ -29,7 +29,6 @@ function addForm() {
     <div class="form-heading">Provide pantry item information</div>
     <form>
       <label for="ingredient_name"><span>Ingredient Name<span class="required">*</span></span><input type="text" class="input-field" id="ingredient_name" name="ingredient_name"></label>
-      <label for="purchase_date"><span>Purchase Date</span><input type="date" class="input-field" id="purchase_date" name="purchase_date" placeholder="YYYY-MM-DD"></label>
       <label for="expiration_date"><span>Expiraton Date</span><input type="date" class="input-field" id="expiration_date" name="expiration_date" placeholder="YYYY-MM-DD"></label>
       <label for="amount"><span>Amount</span><input type="text" class="input-field" id="amount" name="amount" style="width:30%;">${select.outerHTML}</label>
       <label for="running_low"><span>Running low at</span><input type="text" class="input-field" id="running_low" name="running_low" style="width:30%;"></label>
@@ -41,7 +40,6 @@ function addForm() {
 
 window.submitPantryItem = async function () {
   const name = document.getElementById('ingredient_name').value;
-  const purchase_date = getOrNull(document.getElementById('purchase_date'), "value");
   const expiration_date = getOrNull(document.getElementById('expiration_date'), "value");
   const essential = document.getElementById('essential').checked;
 
@@ -56,7 +54,6 @@ window.submitPantryItem = async function () {
   let map = transformAmount(amount, unit);
 
   const ingredient_id = await makeIngredientIfNotExists(name);
-  map.set('purchase_date', purchase_date);
   map.set('expiration_date', expiration_date);
   map.set('ingredient_id', ingredient_id);
   if (running_low != null) {
