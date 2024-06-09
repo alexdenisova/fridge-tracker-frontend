@@ -47,7 +47,7 @@ function addForm() {
       <label for="link"><span>Link</span><input type="text" class="input-field" id="link" name="link"></label>
       <button id="parse-link-button" class="parse" type="button" onclick="parseLink('link', 'parse-link-button')">Get Recipe from Link</button><br><br>
       <label for="ingredients"><span>Ingredients <span class="required">*</span></span><textarea id="ingredients" name="ingredients" class="textarea-field"></textarea></label>
-      <button id="${PARSED_INGREDIENTS_BUTTON_ID}" class="parse" type="button" onclick="parseIngredients('parse-ingredients', '${PARSED_INGREDIENTS_BUTTON_ID}')">Parse Ingredients</button><br><br>
+      <button id="${PARSED_INGREDIENTS_BUTTON_ID}" class="parse" type="button" onclick="parseIngredients('ingredients', '${PARSED_INGREDIENTS_BUTTON_ID}')">Parse Ingredients</button><br><br>
       <label for="prep_time_mins"><span>Prep Time (mins)</span><input type="text" class="input-field" id="prep_time_mins" name="prep_time_mins"></label>
       <label for="total_time_mins"><span>Total Time (mins)</span><input type="text" class="input-field" id="total_time_mins" name="total_time_mins"></label>
       <label for="instructions"><span>Instructions <span class="required">*</span></span><textarea id="instructions" name="instructions" class="textarea-field"></textarea></label>
@@ -141,7 +141,8 @@ window.parseLink = function (link_id, button_id) {
 }
 
 window.parseIngredients = function (input_id, button_id) {
-  clickButton(button_id)
+  clickButton(button_id);
+  console.log("in");
   getParseIngredients(document.getElementById(input_id).value)
     .then(async function (response) {
       if (!response.ok) {
