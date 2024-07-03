@@ -1,9 +1,9 @@
 import { getIngredientName, makeIngredientIfNotExists } from "../backend/ingredients.js";
-import { deleteRecipeIngredient, listRecipeIngredients, postRecipeIngredient } from "../backend/recipe_ingredients.js";
+import { listRecipeIngredients, makeRecipeIngredientIfNotExists } from "../backend/recipe_ingredients.js";
 import { deleteRecipe, getRecipe, putRecipe } from "../backend/recipes.js";
 import { getOrNull, showMessage, showMessageThenRedirect } from "../utils.js";
 import { INGREDIENT_TABLE_ID, main } from "./constants.js";
-import { createTable } from './ingredient_table.js';
+import { createTable, ingredientRowChanged } from './ingredient_table.js';
 import { createStar, getRating } from './utils.js';
 
 const CHANGE_ID = "change_recipe";
@@ -94,11 +94,11 @@ window.saveRecipe = async function (item_id) {
   if (response.ok) {
     const data = await response.json();
     const all_ingredients_added = await postOrPutRecipeIngredients(data.id);
-    if (all_ingredients_added) {
-      showMessageThenRedirect("Successfully saved recipe!", true, "index.html");
-    } else {
-      showMessageThenRedirect("Recipe saved, but not all ingredients!", false, "recipe.html?id=" + item_id);
-    }
+    // if (all_ingredients_added) {
+    //   showMessageThenRedirect("Successfully saved recipe!", true, "index.html");
+    // } else {
+    //   showMessageThenRedirect("Recipe saved, but not all ingredients!", false, "recipe.html?id=" + item_id);
+    // }
   } else if (response.status == 401) {
     redirectToLogin();
   } else {
@@ -107,37 +107,24 @@ window.saveRecipe = async function (item_id) {
   return false;
 }
 
-async function removeRecipeIngredients(recipe_id) {
-  const list_response = await listRecipeIngredients(recipe_id);
-  if (!list_response.ok) {
-    return false;
-  }
-  const ri = await list_response.json();
-  for (var j = 0; j < ri.items.length; j++) {
-    await deleteRecipeIngredient(ri.items[j].id);
-  }
-  return true;
-}
-
 async function postOrPutRecipeIngredients(recipe_id) {
-  if (! await removeRecipeIngredients(recipe_id)) {
-    return false;
-  }
-
   const table = document.getElementById(INGREDIENT_TABLE_ID);
 
   let all_ingredients_added = true;
   for (var i = 0; i < table.children[1].childElementCount; i++) {
     const tr_id = table.children[1].children[i].id;
-    let amount = getOrNull(document.getElementById(tr_id + "-0"), "value");
-    let unit = getOrNull(document.getElementById(tr_id + "-1"), "value");
-    let name = document.getElementById(tr_id + "-2").value;
-    let optional = document.getElementById(tr_id + "-3").checked;
-    const ingredient_id = await makeIngredientIfNotExists(name);
+    if (ingredientRowChanged(tr_id) == "true") {
+      console.log("Updating recipe ingredient " + tr_id);
+      let amount = getOrNull(document.getElementById(tr_id + "-0"), "value");
+      let unit = getOrNull(document.getElementById(tr_id + "-1"), "value");
+      let name = document.getElementById(tr_id + "-2").value;
+      let optional = document.getElementById(tr_id + "-3").checked;
+      const ingredient_id = await makeIngredientIfNotExists(name);
 
-    const response = await postRecipeIngredient(recipe_id, ingredient_id, optional, amount, unit);
-    if (!response.ok) {
-      all_ingredients_added = false;
+      const response = await makeRecipeIngredientIfNotExists(recipe_id, ingredient_id, optional, amount, unit);
+      if (!response.ok) {
+        all_ingredients_added = false;
+      }
     }
   }
   return all_ingredients_added;
