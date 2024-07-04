@@ -41,11 +41,14 @@ export async function putRecipeIngredient(id, recipe_id, ingredient_id, optional
 
 export async function listRecipeIngredients(recipe_id, ingredient_id = null) {
   let params = "";
-  if (recipe_id != null) {
-    params = "?recipe_id=" + recipe_id;
-  }
-  if (ingredient_id != null) {
-    params = "?ingredient_id=" + ingredient_id;
+  if (recipe_id != null || ingredient_id != null) {
+    params = "?";
+    if (recipe_id != null) {
+      params += "recipe_id=" + recipe_id;
+    }
+    if (ingredient_id != null) {
+      params += "&ingredient_id=" + ingredient_id;
+    }
   }
   return await fetch(RECIPE_INGREDIENT_ENDPOINT + params, {
     method: 'GET',
@@ -81,3 +84,26 @@ export async function deleteRecipeIngredient(id) {
     return response;
   });
 }
+
+export async function makeRecipeIngredientIfNotExists(recipe_id, ingredient_id, optional = false, amount = null, unit = null) {
+  console.log(recipe_id + "  " + ingredient_id);
+  let resp;
+  await listRecipeIngredients(recipe_id, ingredient_id).then(async response => {
+    if (response.ok) {
+      const data = await response.json();
+      if (data.items.length > 0) {
+        const id = data.items[0].id;
+        await putRecipeIngredient(id, recipe_id, ingredient_id, optional, amount, unit).then(response => {
+          resp = response;
+        })
+      } else {
+        await postRecipeIngredient(recipe_id, ingredient_id, optional, amount, unit).then(response => {
+          resp = response;
+        })
+      }
+    } else {
+      resp = response;
+    }
+  });
+  return resp;
+} 

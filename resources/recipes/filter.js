@@ -1,4 +1,4 @@
-import { getIngredientId, listIngredients } from "../backend/ingredients.js";
+import { listIngredients } from "../backend/ingredients.js";
 import { buttonIsPressed, clickButton, hideElement, showElement } from "../utils.js";
 import { unpressAddRecipeButton } from './add.js';
 import { LIST_ID, main } from "./constants.js";
@@ -70,7 +70,7 @@ window.byIngredients = function () {
       document.getElementById(FILTER_ID).appendChild(div);
 
       addIngredients();
-      document.getElementById(FILTER_TEXT_ID).addEventListener("keyup", filter);
+      document.getElementById(FILTER_TEXT_ID).addEventListener("keyup", search_ingredients);
     } else {
       showElement("ingredients-container", "block");
     }
@@ -86,14 +86,14 @@ function addIngredients() {
   listIngredients().then(response => response.json()).then(data => {
     for (const item of data.items) {
       const div = document.createElement('div');
-      div.innerHTML = `<input type="checkbox" name="${item.name}" value="${item.name}" id="${item.name}">
-        <label for="${item.name}">${item.name}</label>`;
+      div.innerHTML = `<input type="checkbox" name="${item.name}" value="${item.name}">
+        <label for="${item.name}" id="${item.id}">${item.name}</label>`;
       list.appendChild(div);
     }
   })
 }
 
-function filter() {
+function search_ingredients() {
   let value = document.getElementById(FILTER_TEXT_ID).value.toUpperCase();
   var names = document.getElementById(FILTER_INGREDIENT_LIST_ID);
 
@@ -112,20 +112,17 @@ window.filterByIngredients = async function () {
   for (let i = 0; i < ingredients.childElementCount; i++) {
     let div = ingredients.children[i];
     if (div.getElementsByTagName("input")[0].checked) {
-      let name = div.getElementsByTagName("label")[0].innerText;
-      await getIngredientId(name).then(ingredient_id => {
-        if (!first) {
-          ingredient_list += ',';
-        } else {
-          first = false;
-        }
-        ingredient_list += '"' + encodeURIComponent(ingredient_id) + '"';
-      });
+      let ingredient_id = div.getElementsByTagName("label")[0].id;
+      if (!first) {
+        ingredient_list += ',';
+      } else {
+        first = false;
+      }
+      ingredient_list += '"' + encodeURIComponent(ingredient_id) + '"';
     }
   }
   ingredient_list += "]";
   hideElement(FILTER_ID);
   removeElement(LIST_ID);
-  showRecipes(`ingredient_ids=${ingredient_list}`)
-  showElement(LIST_ID);
+  showRecipes(`ingredient_ids=${ingredient_list}`);
 }

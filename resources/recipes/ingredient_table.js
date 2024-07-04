@@ -41,13 +41,24 @@ export function addIngredientRow(amount = "", unit = "", name = "", optional = f
     checked = "checked='checked'";
   }
   tr.innerHTML = `
-      <td><input type="text" id="${tr_id}-0" value="${nullToEmpty(amount)}" style="width:65%"></td>
-      <td><input type="text" id="${tr_id}-1" value="${nullToEmpty(unit)}" style="width:75%"></td>
-      <td><input type="text" id="${tr_id}-2" value="${nullToEmpty(name)}" style="width:94%"></td>
-      <td><input type="checkbox" id="${tr_id}-3" ${checked}></td>
+      <td><input type="text" data-changed="false" onchange="change('${tr_id}-0');" id="${tr_id}-0" value="${nullToEmpty(amount)}" style="width:65%"></td>
+      <td><input type="text" data-changed="false" onchange="change('${tr_id}-1');" id="${tr_id}-1" value="${nullToEmpty(unit)}" style="width:75%"></td>
+      <td><input type="text" data-changed="false" onchange="change('${tr_id}-2');" id="${tr_id}-2" value="${nullToEmpty(name)}" style="width:94%"></td>
+      <td><input type="checkbox" data-changed="false" onchange="change('${tr_id}-3');" id="${tr_id}-3" ${checked}></td>
       <td><img src="http://findicons.com/files/icons/1715/gion/24/dialog_cancel.png"
       onclick='removeElement("${tr_id}")'></td>`;
   return tr;
+}
+
+window.change = function (id) {
+  document.getElementById(id).dataset.changed = "true";
+}
+
+export function ingredientRowChanged(tr_id) {
+  return document.getElementById(tr_id + "-0").dataset.changed ||
+    document.getElementById(tr_id + "-1").dataset.changed ||
+    document.getElementById(tr_id + "-2").dataset.changed ||
+    document.getElementById(tr_id + "-3").dataset.changed;
 }
 
 function nullToEmpty(str) {
