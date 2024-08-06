@@ -11,6 +11,10 @@ const FILTER_INGREDIENT_LIST_ID = "filter_ingredient_list"
 const UNCLICKED_COLOR = "rgb(255, 255, 255)";
 const CLICKED_COLOR = "rgb(241, 240, 240)";
 
+var INGREDIENT_PAGE = 1;
+var MAX_INGREDIENT_PAGE = null;
+const INGREDIENT_PER_PAGE = 5;
+
 window.filterButton = function (filter_id) {
   if (buttonIsPressed(filter_id)) {
     if (document.getElementById(FILTER_ID).style.display == "none") {
@@ -64,12 +68,12 @@ window.byIngredients = function () {
       div.setAttribute("id", "ingredients-container");
       div.innerHTML = `
       <input type="text" id="${FILTER_TEXT_ID}" placeholder="Find ingredient">
-      <div id='${FILTER_INGREDIENT_LIST_ID}' class="options">
+      <div id='${FILTER_INGREDIENT_LIST_ID}' class="options" onscroll='onScroll();'>
       </div>
       <button class="apply" onclick="filterByIngredients()">Apply</button>`;
       document.getElementById(FILTER_ID).appendChild(div);
 
-      addIngredients();
+      addIngredients(INGREDIENT_PAGE, INGREDIENT_PER_PAGE);
       document.getElementById(FILTER_TEXT_ID).addEventListener("keyup", search_ingredients);
     } else {
       showElement("ingredients-container", "block");
@@ -81,28 +85,43 @@ window.byIngredients = function () {
   }
 }
 
-function addIngredients() {
+// Adds to the ingredient list when user scrolls to the bottom
+window.onScroll = function () {
+  var myElement = document.getElementById(FILTER_INGREDIENT_LIST_ID);
+  if (myElement.scrollTop + myElement.clientHeight > myElement.scrollHeight - 1 && INGREDIENT_PAGE <= MAX_INGREDIENT_PAGE) {
+    addIngredients();
+  }
+}
+
+function addIngredients(name_contains = null) {
   const list = document.getElementById(FILTER_INGREDIENT_LIST_ID);
-  listIngredients().then(response => response.json()).then(data => {
+  listIngredients(INGREDIENT_PAGE, INGREDIENT_PER_PAGE, null, name_contains).then(response => response.json()).then(data => {
     for (const item of data.items) {
       const div = document.createElement('div');
       div.innerHTML = `<input type="checkbox" name="${item.name}" value="${item.name}">
         <label for="${item.name}" id="${item.id}">${item.name}</label>`;
       list.appendChild(div);
     }
-  })
+    INGREDIENT_PAGE++;
+    if (MAX_INGREDIENT_PAGE == null) {
+      MAX_INGREDIENT_PAGE = data._metadata.page_count;
+    }
+  });
 }
 
 function search_ingredients() {
-  let value = document.getElementById(FILTER_TEXT_ID).value.toUpperCase();
-  var names = document.getElementById(FILTER_INGREDIENT_LIST_ID);
-
-  for (var i = 0; i < names.childElementCount; i++) {
-    let div = names.children[i];
-    let name = div.getElementsByTagName("label")[0].innerText;
-    div.style.display =
-      name.toUpperCase().indexOf(value) > -1 ? "" : "none";
+  var name_contains = document.getElementById(FILTER_TEXT_ID).value.toUpperCase();
+  if (name_contains == '') {
+    name_contains = null;
   }
+  const ingredients = document.getElementById(FILTER_INGREDIENT_LIST_ID);
+
+  while (ingredients.firstChild) {
+    ingredients.removeChild(ingredients.lastChild);
+  }
+  INGREDIENT_PAGE = 1;
+  MAX_INGREDIENT_PAGE = null;
+  addIngredients(name_contains);
 }
 
 window.filterByIngredients = async function () {

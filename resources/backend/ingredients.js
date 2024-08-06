@@ -15,10 +15,13 @@ export async function getIngredient(ingredient_id) {
 }
 
 /// Get ids of ingredients that contain ingredient_name
-export async function listIngredients(ingredient_name = null) {
-  let options = "";
+export async function listIngredients(page, per_page, ingredient_name = null, name_contains = null) {
+  let options = `?page=${page}&per_page=${per_page}`;
+  if (name_contains != null) {
+    options += `&name_contains=${name_contains}`;
+  }
   if (ingredient_name != null) {
-    options = `?name=${ingredient_name}`;
+    options += `&name=${ingredient_name}`;
   }
   return await fetch(INGREDIENT_ENDPOINT + options, {
     method: 'GET',
