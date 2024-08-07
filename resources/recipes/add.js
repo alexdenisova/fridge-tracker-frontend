@@ -3,6 +3,7 @@ import { getParseIngredients } from "../backend/parse_ingredients.js";
 import { getParseRecipeLink } from "../backend/parse_recipe_link.js";
 import { postRecipeIngredient } from "../backend/recipe_ingredients.js";
 import { postRecipe } from "../backend/recipes.js";
+import { PAGINATION_ID } from '../constants.js';
 import { clickButton, hideElement, redirectToLogin, showElement, showMessage, showMessageThenRedirect } from "../utils.js";
 import { INGREDIENT_TABLE_ID, LIST_ID, main } from "./constants.js";
 import { unpressFilterButton } from "./filter.js";
@@ -18,8 +19,10 @@ window.addRecipeButton = function (add_id) {
   if (clickButton(add_id) == "unpressed") {
     hideElement(ADD_ID);
     showElement(LIST_ID);
+    showElement(PAGINATION_ID);
   } else {
     hideElement(LIST_ID);
+    hideElement(PAGINATION_ID);
     unpressFilterButton();
     if (document.getElementById(ADD_ID) == null) {
       addForm();
@@ -61,7 +64,10 @@ function addForm() {
 }
 
 window.submitRecipe = async function () {
-  const name = document.getElementById('recipe_name').value;
+  var name = document.getElementById('recipe_name').value;
+  if (name == "") {
+    name = null;
+  }
   const link = document.getElementById('link').value;
   const prep_time_mins = document.getElementById('prep_time_mins').value;
   const total_time_mins = document.getElementById('total_time_mins').value;
@@ -142,7 +148,6 @@ window.parseLink = function (link_id, button_id) {
 
 window.parseIngredients = function (input_id, button_id) {
   clickButton(button_id);
-  console.log("in");
   getParseIngredients(document.getElementById(input_id).value)
     .then(async function (response) {
       if (!response.ok) {

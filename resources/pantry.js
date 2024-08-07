@@ -6,7 +6,10 @@ import "./pantry/show.js";
 const search_container = document.getElementById("search-container");
 const search = document.getElementById("query");
 
-showPantryItems();
+const url = new URL(location.href);
+const page = url.searchParams.get("page");
+
+showPantryItems(page ? page : 1);
 
 search_container.addEventListener("submit", (e) => {
   e.preventDefault();

@@ -49,21 +49,6 @@ export async function postIngredient(ingredient_name) {
   });
 }
 
-export async function patchIngredient(ingredient_id) {
-  return await fetch(INGREDIENT_ENDPOINT + "/" + ingredient_id, {
-    method: 'PATCH',
-    headers: {
-      'Accept': 'application/json, text/plain, */*',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      // ...can_be_eaten_raw && { 'can_be_eaten_raw': can_be_eaten_raw },
-    })
-  }).then(response => {
-    return response;
-  });
-}
-
 export async function deleteIngredient(id) {
   return await fetch(INGREDIENT_ENDPOINT + "/" + id, {
     method: 'DELETE',
@@ -89,7 +74,7 @@ export async function getIngredientName(ingredient_id) {
 
 /// Get ingredient id by name
 export async function getIngredientId(ingredient_name) {
-  return await listIngredients(ingredient_name).then(async response => {
+  return await listIngredients(1, 5, ingredient_name).then(async response => {
     if (!response.ok) {
       return null;
     } else {

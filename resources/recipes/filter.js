@@ -1,4 +1,5 @@
 import { listIngredients } from "../backend/ingredients.js";
+import { PAGINATION_ID } from '../constants.js';
 import { buttonIsPressed, clickButton, hideElement, showElement } from "../utils.js";
 import { unpressAddRecipeButton } from './add.js';
 import { LIST_ID, main } from "./constants.js";
@@ -19,15 +20,18 @@ window.filterButton = function (filter_id) {
   if (buttonIsPressed(filter_id)) {
     if (document.getElementById(FILTER_ID).style.display == "none") {
       hideElement(LIST_ID);
+      hideElement(PAGINATION_ID);
       showElement(FILTER_ID, "block");
     } else {
       clickButton(filter_id)
       hideElement(FILTER_ID);
       showElement(LIST_ID);
+      showElement(PAGINATION_ID);
     }
   } else {
     clickButton(filter_id)
     hideElement(LIST_ID);
+    hideElement(PAGINATION_ID);
     unpressAddRecipeButton();
     if (document.getElementById(FILTER_ID) == null) {
       addFilterOptions();
@@ -143,5 +147,5 @@ window.filterByIngredients = async function () {
   ingredient_list += "]";
   hideElement(FILTER_ID);
   removeElement(LIST_ID);
-  showRecipes(`ingredient_ids=${ingredient_list}`);
+  showRecipes(1, `ingredient_ids=${ingredient_list}`);
 }

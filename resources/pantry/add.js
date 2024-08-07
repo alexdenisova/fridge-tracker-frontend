@@ -1,5 +1,6 @@
 import { makeIngredientIfNotExists } from "../backend/ingredients.js";
 import { postPantryItem } from "../backend/pantry_items.js";
+import { PAGINATION_ID } from '../constants.js';
 import { clickButton, getOrNull, hideElement, showElement, showMessage, showMessageThenRedirect } from "../utils.js";
 import { LIST_ID, UNIT_ID, main } from "./constants.js";
 import { transformAmount, unitOptions } from "./utils.js";
@@ -10,8 +11,10 @@ window.addPantryItemButton = function (add_id) {
   if (clickButton(add_id) == "unpressed") {
     hideElement(ADD_ID);
     showElement(LIST_ID);
+    showElement(PAGINATION_ID);
   } else {
     hideElement(LIST_ID);
+    hideElement(PAGINATION_ID);
     if (document.getElementById(ADD_ID) == null) {
       addForm();
     } else {
@@ -39,7 +42,10 @@ function addForm() {
 }
 
 window.submitPantryItem = async function () {
-  const name = document.getElementById('ingredient_name').value;
+  var name = document.getElementById('ingredient_name').value;
+  if (name == "") {
+    name = null;
+  }
   const expiration_date = getOrNull(document.getElementById('expiration_date'), "value");
   const essential = document.getElementById('essential').checked;
 

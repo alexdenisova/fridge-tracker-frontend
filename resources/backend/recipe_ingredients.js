@@ -86,7 +86,6 @@ export async function deleteRecipeIngredient(id) {
 }
 
 export async function makeRecipeIngredientIfNotExists(recipe_id, ingredient_id, optional = false, amount = null, unit = null) {
-  console.log(recipe_id + "  " + ingredient_id);
   let resp;
   await listRecipeIngredients(recipe_id, ingredient_id).then(async response => {
     if (response.ok) {
