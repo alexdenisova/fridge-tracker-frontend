@@ -9,7 +9,10 @@ import "./utils.js";
 const search_container = document.getElementById("search-container");
 const search = document.getElementById("query");
 
-showRecipes();
+const url = new URL(location.href);
+const page = url.searchParams.get("page");
+
+showRecipes(page ? page : 1);
 
 search_container.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -18,7 +21,7 @@ search_container.addEventListener("submit", (e) => {
   const searchItem = search.value;
 
   if (searchItem) {
-    showRecipes(`name_contains=${searchItem}`);
+    showRecipes(1, `name_contains=${searchItem}`);
     search.value = "";
   }
 });

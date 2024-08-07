@@ -13,12 +13,12 @@ export async function getPantryItem(id) {
   });
 }
 
-export async function listPantryItems(query_params = null) {
-  let url = PANTRY_ITEMS_ENDPOINT;
+export async function listPantryItems(page, per_page, query_params = null) {
+  let options = `?page=${page}&per_page=${per_page}`;
   if (query_params != null) {
-    url += "?" + query_params;
+    options += "&" + query_params;
   }
-  return await fetch(url, {
+  return await fetch(PANTRY_ITEMS_ENDPOINT + options, {
     method: 'GET',
     headers: {
       'Accept': 'application/json, text/plain, */*',

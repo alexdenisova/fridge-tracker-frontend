@@ -1,12 +1,14 @@
 import { getIngredientName } from "../backend/ingredients.js";
 import { listPantryItems } from "../backend/pantry_items.js";
-import { CARDS_CLASS } from "../constants.js";
-import { redirectToLogin, showMessage } from "../utils.js";
-import { LIST_ID, main } from "./constants.js";
+import { PANTRY_PATH } from "../constants.js";
+import { pagination, redirectToLogin, showMessage } from "../utils.js";
+import { LIST_ID } from "./constants.js";
 import { daysLeft, expirationDate } from "./utils.js";
 
-export function showPantryItems(query_params = null) {
-  listPantryItems(query_params)
+export function showPantryItems(page, query_params = null) {
+  const per_page = Math.floor(window.screen.width / 190) * 4;
+  console.log("Pantry items per_page: " + per_page);
+  listPantryItems(page, per_page, query_params)
     .then(async function (response) {
       if (!response.ok) {
         if (response.status == 401) {
@@ -17,9 +19,7 @@ export function showPantryItems(query_params = null) {
         return false;
       }
       const data = await response.json();
-      const pantry_items = document.createElement('div');
-      pantry_items.setAttribute("id", LIST_ID);
-      pantry_items.setAttribute("class", CARDS_CLASS);
+      const pantry_items = document.getElementById(LIST_ID);
       for (const item of data.items) {
         const ingredient_name = await getIngredientName(item.ingredient_id);
         let amount = "-";
@@ -64,6 +64,6 @@ export function showPantryItems(query_params = null) {
         `
         pantry_items.appendChild(div_card);
       }
-      main.appendChild(pantry_items);
+      pagination(PANTRY_PATH, data._metadata.page_count, page);
     });
 }

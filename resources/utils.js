@@ -70,3 +70,53 @@ export function showMessageThenRedirect(message, is_good, redirect) {
     window.location.href = redirect;
   }, TIME_BEFORE_REDIRECT);
 }
+
+export function pagination(path, total_pages, current_page) {
+  current_page = Number(current_page);
+  const pagination = document.getElementById("pagination");
+  pagination.innerHTML = "";
+  if (current_page != 1) {
+    pagination.innerHTML = `<a href="${path}?page=${current_page - 1}">&laquo;</a>`; // this shifts the page bar left
+  }
+  if (total_pages <= 7) {
+    for (var i = 1; i <= total_pages; i++) {
+      console.log(total_pages + " " + current_page);
+      if (i != current_page) {
+        pagination.innerHTML += `<a href="${path}?page=${i}">${i}</a>`;
+      } else {
+        pagination.innerHTML += `<a href="${path}?page=${i}" class="active">${i}</a>`;
+      }
+    }
+  } else {
+    if (current_page == 1) {
+      pagination.innerHTML += `<a href="${path}?page=1" class="active">1</a>`;
+    } else {
+      pagination.innerHTML += `<a href="${path}?page=1">1</a>`;
+    }
+
+    if (current_page > 3) {
+      pagination.innerHTML += `<a href="" class="dot-dot">..</a>`;
+    }
+    if (current_page > 2) {
+      pagination.innerHTML += `<a href="${path}?page=${current_page - 1}">${current_page - 1}</a>`;
+    }
+    if (current_page != 1 && current_page != total_pages) {
+      pagination.innerHTML += `<a href="${path}?page=${current_page}" class="active">${current_page}</a>`;
+    }
+    if (current_page < total_pages - 1) {
+      pagination.innerHTML += `<a href="${path}?page=${current_page + 1}">${current_page + 1}</a>`;
+    }
+    if (current_page < total_pages - 2) {
+      pagination.innerHTML += `<a href="" class="dot-dot">..</a>`;
+    }
+    if (current_page == total_pages) {
+      pagination.innerHTML += `<a href="${path}?page=${total_pages}" class="active">${total_pages}</a>`;
+    } else {
+      pagination.innerHTML += `<a href="${path}?page=${total_pages}">${total_pages}</a>`;
+    }
+  }
+  if (current_page != total_pages) {
+    console.log(current_page + 1);
+    pagination.innerHTML += `<a href="${path}?page=${current_page + 1}">&raquo;</a>`; // this shifts the page bar left
+  }
+}
