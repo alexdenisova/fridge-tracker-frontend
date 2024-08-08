@@ -3,6 +3,8 @@ import { RECIPES_PATH } from "../constants.js";
 import { pagination, redirectToLogin, showMessage } from "../utils.js";
 import { LIST_ID } from "./constants.js";
 
+
+//TODO: fix search
 export function showRecipes(page, query_params = null) {
   const per_page = Math.floor(window.screen.width / 270) * 3;
   console.log("Recipe per_page: " + per_page);
@@ -18,6 +20,7 @@ export function showRecipes(page, query_params = null) {
       }
       const data = await response.json();
       const recipes = document.getElementById(LIST_ID);
+      recipes.innerHTML = "";
       data.items.forEach(recipe => {
         const div_card = document.createElement('div');
         div_card.innerHTML = `

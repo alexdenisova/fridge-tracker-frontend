@@ -20,6 +20,7 @@ export function showPantryItems(page, query_params = null) {
       }
       const data = await response.json();
       const pantry_items = document.getElementById(LIST_ID);
+      pantry_items.innerHTML = "";
       for (const item of data.items) {
         const ingredient_name = await getIngredientName(item.ingredient_id);
         let amount = "-";
