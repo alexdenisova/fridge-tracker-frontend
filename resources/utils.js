@@ -80,7 +80,6 @@ export function pagination(path, total_pages, current_page) {
   }
   if (total_pages <= 7) {
     for (var i = 1; i <= total_pages; i++) {
-      console.log(total_pages + " " + current_page);
       if (i != current_page) {
         pagination.innerHTML += `<a href="${path}?page=${i}">${i}</a>`;
       } else {
@@ -116,7 +115,6 @@ export function pagination(path, total_pages, current_page) {
     }
   }
   if (current_page != total_pages) {
-    console.log(current_page + 1);
     pagination.innerHTML += `<a href="${path}?page=${current_page + 1}">&raquo;</a>`; // this shifts the page bar left
   }
 }

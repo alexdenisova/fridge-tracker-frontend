@@ -6,7 +6,7 @@ import { LIST_ID } from "./constants.js";
 import { daysLeft, expirationDate } from "./utils.js";
 
 export function showPantryItems(page, query_params = null) {
-  const per_page = Math.floor(window.screen.width / 190) * 4;
+  const per_page = Math.floor(window.screen.width / 170) * 4;
   console.log("Pantry items per_page: " + per_page);
   listPantryItems(page, per_page, query_params)
     .then(async function (response) {
