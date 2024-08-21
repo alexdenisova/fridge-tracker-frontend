@@ -71,50 +71,53 @@ export function showMessageThenRedirect(message, is_good, redirect) {
   }, TIME_BEFORE_REDIRECT);
 }
 
-export function pagination(path, total_pages, current_page) {
+export function pagination(path, total_pages, current_page, query_params = "") {
   current_page = Number(current_page);
+  if (query_params != "") {
+    query_params = "&" + query_params;
+  }
   const pagination = document.getElementById("pagination");
   pagination.innerHTML = "";
   if (current_page != 1) {
-    pagination.innerHTML = `<a href="${path}?page=${current_page - 1}">&laquo;</a>`; // this shifts the page bar left
+    pagination.innerHTML = `<a href="${path}?page=${current_page - 1}${query_params}">&laquo;</a>`; // this shifts the page bar left
   }
   if (total_pages <= 7) {
     for (var i = 1; i <= total_pages; i++) {
       if (i != current_page) {
-        pagination.innerHTML += `<a href="${path}?page=${i}">${i}</a>`;
+        pagination.innerHTML += `<a href="${path}?page=${i}${query_params}">${i}</a>`;
       } else {
-        pagination.innerHTML += `<a href="${path}?page=${i}" class="active">${i}</a>`;
+        pagination.innerHTML += `<a href="${path}?page=${i}${query_params}" class="active">${i}</a>`;
       }
     }
   } else {
     if (current_page == 1) {
-      pagination.innerHTML += `<a href="${path}?page=1" class="active">1</a>`;
+      pagination.innerHTML += `<a href="${path}?page=1${query_params}" class="active">1</a>`;
     } else {
-      pagination.innerHTML += `<a href="${path}?page=1">1</a>`;
+      pagination.innerHTML += `<a href="${path}?page=1${query_params}">1</a>`;
     }
 
     if (current_page > 3) {
       pagination.innerHTML += `<a href="" class="dot-dot">..</a>`;
     }
     if (current_page > 2) {
-      pagination.innerHTML += `<a href="${path}?page=${current_page - 1}">${current_page - 1}</a>`;
+      pagination.innerHTML += `<a href="${path}?page=${current_page - 1}${query_params}">${current_page - 1}</a>`;
     }
     if (current_page != 1 && current_page != total_pages) {
-      pagination.innerHTML += `<a href="${path}?page=${current_page}" class="active">${current_page}</a>`;
+      pagination.innerHTML += `<a href="${path}?page=${current_page}${query_params}" class="active">${current_page}</a>`;
     }
     if (current_page < total_pages - 1) {
-      pagination.innerHTML += `<a href="${path}?page=${current_page + 1}">${current_page + 1}</a>`;
+      pagination.innerHTML += `<a href="${path}?page=${current_page + 1}${query_params}">${current_page + 1}</a>`;
     }
     if (current_page < total_pages - 2) {
       pagination.innerHTML += `<a href="" class="dot-dot">..</a>`;
     }
     if (current_page == total_pages) {
-      pagination.innerHTML += `<a href="${path}?page=${total_pages}" class="active">${total_pages}</a>`;
+      pagination.innerHTML += `<a href="${path}?page=${total_pages}${query_params}" class="active">${total_pages}</a>`;
     } else {
-      pagination.innerHTML += `<a href="${path}?page=${total_pages}">${total_pages}</a>`;
+      pagination.innerHTML += `<a href="${path}?page=${total_pages}${query_params}">${total_pages}</a>`;
     }
   }
   if (current_page != total_pages) {
-    pagination.innerHTML += `<a href="${path}?page=${current_page + 1}">&raquo;</a>`; // this shifts the page bar left
+    pagination.innerHTML += `<a href="${path}?page=${current_page + 1}${query_params}">&raquo;</a>`; // this shifts the page bar left
   }
 }

@@ -97,7 +97,6 @@ window.submitRecipe = async function () {
   return false;
 }
 
-// TODO: return list of failed creations
 async function postRecipeIngredients(recipe_id) {
   const table = document.getElementById(INGREDIENT_TABLE_ID);
 

@@ -77,7 +77,7 @@ window.byIngredients = function () {
       <button class="apply" onclick="filterByIngredients()">Apply</button>`;
       document.getElementById(FILTER_ID).appendChild(div);
 
-      addIngredients(INGREDIENT_PAGE, INGREDIENT_PER_PAGE);
+      addIngredients();
       document.getElementById(FILTER_TEXT_ID).addEventListener("keyup", search_ingredients);
     } else {
       showElement("ingredients-container", "block");
@@ -141,11 +141,12 @@ window.filterByIngredients = async function () {
       } else {
         first = false;
       }
-      ingredient_list += '"' + encodeURIComponent(ingredient_id) + '"';
+      ingredient_list += encodeURIComponent('"' + ingredient_id + '"');
     }
   }
   ingredient_list += "]";
   hideElement(FILTER_ID);
-  removeElement(LIST_ID);
+  showElement(LIST_ID);
+  showElement(PAGINATION_ID);
   showRecipes(1, `ingredient_ids=${ingredient_list}`);
 }

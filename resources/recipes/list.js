@@ -4,10 +4,9 @@ import { pagination, redirectToLogin, showMessage } from "../utils.js";
 import { LIST_ID } from "./constants.js";
 
 
-//TODO: fix search
 export function showRecipes(page, query_params = null) {
   const per_page = Math.floor(window.screen.width / 270) * 3;
-  console.log("Recipe per_page: " + per_page);
+  console.log("Recipes per_page: " + per_page);
   listRecipes(page, per_page, query_params)
     .then(async function (response) {
       if (!response.ok) {
@@ -35,6 +34,6 @@ export function showRecipes(page, query_params = null) {
         `
         recipes.appendChild(div_card);
       });
-      pagination(RECIPES_PATH, data._metadata.page_count, page);
+      pagination(RECIPES_PATH, data._metadata.page_count, page, query_params);
     });
 }
