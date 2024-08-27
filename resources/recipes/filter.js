@@ -99,7 +99,8 @@ window.onScroll = function () {
 
 function addIngredients(name_contains = null) {
   const list = document.getElementById(FILTER_INGREDIENT_LIST_ID);
-  listIngredients(INGREDIENT_PAGE, INGREDIENT_PER_PAGE, null, name_contains).then(response => response.json()).then(data => {
+  listRecipeIngredients(null, null, name_contains, INGREDIENT_PAGE, INGREDIENT_PER_PAGE).then(response => response.json()).then(data => {
+    console.log("data: " + data);
     for (const item of data.items) {
       const div = document.createElement('div');
       div.innerHTML = `<input type="checkbox" name="${item.name}" value="${item.name}">
@@ -111,6 +112,11 @@ function addIngredients(name_contains = null) {
       MAX_INGREDIENT_PAGE = data._metadata.page_count;
     }
   });
+}
+
+function getUserRecipes() {
+  const list = document.getElementById(LIST_ID);
+
 }
 
 function search_ingredients() {
