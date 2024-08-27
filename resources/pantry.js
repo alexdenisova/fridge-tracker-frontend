@@ -18,7 +18,7 @@ search_container.addEventListener("submit", (e) => {
   const searchItem = search.value;
 
   if (searchItem) {
-    showPantryItems(`name_contains=${searchItem}`);
+    showPantryItems(1, `name_contains=${searchItem}`);
     search.value = "";
   }
 });
