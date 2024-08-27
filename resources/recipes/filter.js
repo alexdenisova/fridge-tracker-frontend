@@ -1,4 +1,4 @@
-import { listIngredients } from "../backend/ingredients.js";
+import { listRecipeIngredients } from "../backend/recipe_ingredients.js";
 import { PAGINATION_ID } from '../constants.js';
 import { buttonIsPressed, clickButton, hideElement, showElement } from "../utils.js";
 import { unpressAddRecipeButton } from './add.js';
@@ -77,7 +77,7 @@ window.byIngredients = function () {
       <button class="apply" onclick="filterByIngredients()">Apply</button>`;
       document.getElementById(FILTER_ID).appendChild(div);
 
-      addIngredients(INGREDIENT_PAGE, INGREDIENT_PER_PAGE);
+      addIngredients();
       document.getElementById(FILTER_TEXT_ID).addEventListener("keyup", search_ingredients);
     } else {
       showElement("ingredients-container", "block");
@@ -98,13 +98,14 @@ window.onScroll = function () {
 }
 
 function addIngredients(name_contains = null) {
+  console.log("name_cont: " + name_contains);
   const list = document.getElementById(FILTER_INGREDIENT_LIST_ID);
   listRecipeIngredients(null, null, name_contains, INGREDIENT_PAGE, INGREDIENT_PER_PAGE).then(response => response.json()).then(data => {
-    console.log("data: " + data);
     for (const item of data.items) {
+      console.log(item);
       const div = document.createElement('div');
-      div.innerHTML = `<input type="checkbox" name="${item.name}" value="${item.name}">
-        <label for="${item.name}" id="${item.id}">${item.name}</label>`;
+      div.innerHTML = `<input type="checkbox" name="${item.ingredient_name}" value="${item.name}">
+        <label for="${item.ingredient_name}" id="${item.id}">${item.ingredient_name}</label>`;
       list.appendChild(div);
     }
     INGREDIENT_PAGE++;
