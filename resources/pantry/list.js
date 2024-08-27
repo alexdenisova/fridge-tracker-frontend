@@ -65,6 +65,6 @@ export function showPantryItems(page, query_params = null) {
         `
         pantry_items.appendChild(div_card);
       }
-      pagination(PANTRY_PATH, data._metadata.page_count, page);
+      pagination(PANTRY_PATH, data._metadata.page_count, page, query_params);
     });
 }

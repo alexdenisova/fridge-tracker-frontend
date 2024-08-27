@@ -148,11 +148,12 @@ window.filterByIngredients = async function () {
       } else {
         first = false;
       }
-      ingredient_list += '"' + encodeURIComponent(ingredient_id) + '"';
+      ingredient_list += encodeURIComponent('"' + ingredient_id + '"');
     }
   }
   ingredient_list += "]";
   hideElement(FILTER_ID);
-  removeElement(LIST_ID);
+  showElement(LIST_ID);
+  showElement(PAGINATION_ID);
   showRecipes(1, `ingredient_ids=${ingredient_list}`);
 }

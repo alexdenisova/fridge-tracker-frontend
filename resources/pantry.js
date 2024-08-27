@@ -8,8 +8,10 @@ const search = document.getElementById("query");
 
 const url = new URL(location.href);
 const page = url.searchParams.get("page");
+const query_params = url.searchParams;
+query_params.delete("page")
 
-showPantryItems(page ? page : 1);
+showPantryItems(page ? page : 1, query_params.toString());
 
 search_container.addEventListener("submit", (e) => {
   e.preventDefault();
