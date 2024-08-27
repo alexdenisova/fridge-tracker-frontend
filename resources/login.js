@@ -12,6 +12,16 @@ window.login = async function (username_id, password_id) {
   const password = document.getElementById(password_id).value;
   const response = await postLogin(username, password);
   if (!response.ok) {
+    switch (response.status) {
+      case 404:
+        document.getElementById(LOGIN_ERROR_ID).innerText = 'Username not found.';
+        break;
+      case 401:
+        document.getElementById(LOGIN_ERROR_ID).innerText = 'Wrong password.';
+        break;
+      default:
+        document.getElementById(LOGIN_ERROR_ID).innerText = 'Unknown error.';
+    }
     document.getElementById(LOGIN_ERROR_ID).style.visibility = "visible";
   }
   return false;
@@ -22,6 +32,13 @@ window.createAccount = async function (username_id, password_id) {
   const password = document.getElementById(password_id).value;
   const response = await postUser(username, password);
   if (!response.ok) {
+    switch (response.status) {
+      case 409:
+        document.getElementById(LOGIN_ERROR_ID).innerText = 'Username already exists.';
+        break;
+      default:
+        document.getElementById(LOGIN_ERROR_ID).innerText = 'Unknown error.';
+    }
     document.getElementById(LOGIN_ERROR_ID).style.visibility = "visible";
     return false;
   }
@@ -36,15 +53,13 @@ window.secondaryButton = async function () {
     document.getElementById(MAIN_BUTTON_ID).innerText = sign_up_msg;
     document.getElementById(MAIN_BUTTON_ID).setAttribute("onclick", "createAccount('username', 'password');");
     document.getElementById(SECONDARY_BUTTON_ID).innerText = "Login";
-    document.getElementById('password').type = 'text';
-    document.getElementById(LOGIN_ERROR_ID).innerText = 'Username already exists.';
+    document.getElementById('password').type = 'text'; // TODO: make this password and add an eye
   } else {
     document.getElementById(LOGIN_TITLE_ID).innerText = login_msg;
     document.getElementById(MAIN_BUTTON_ID).innerText = "Log In";
     document.getElementById(MAIN_BUTTON_ID).setAttribute("onclick", "login('username', 'password');");
     document.getElementById(SECONDARY_BUTTON_ID).innerText = "Sign up";
     document.getElementById('password').type = 'password';
-    document.getElementById(LOGIN_ERROR_ID).innerText = 'Wrong username or password.';
   }
 }
 
