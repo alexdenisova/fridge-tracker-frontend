@@ -1,4 +1,4 @@
-import { listIngredients } from "../backend/ingredients.js";
+import { listRecipeIngredients } from "../backend/recipe_ingredients.js";
 import { PAGINATION_ID } from '../constants.js';
 import { buttonIsPressed, clickButton, hideElement, showElement } from "../utils.js";
 import { unpressAddRecipeButton } from './add.js';
@@ -99,11 +99,11 @@ window.onScroll = function () {
 
 function addIngredients(name_contains = null) {
   const list = document.getElementById(FILTER_INGREDIENT_LIST_ID);
-  listIngredients(INGREDIENT_PAGE, INGREDIENT_PER_PAGE, null, name_contains).then(response => response.json()).then(data => {
+  listRecipeIngredients(null, null, name_contains, INGREDIENT_PAGE, INGREDIENT_PER_PAGE).then(response => response.json()).then(data => {
     for (const item of data.items) {
       const div = document.createElement('div');
-      div.innerHTML = `<input type="checkbox" name="${item.name}" value="${item.name}">
-        <label for="${item.name}" id="${item.id}">${item.name}</label>`;
+      div.innerHTML = `<input type="checkbox" name="${item.ingredient_name}" value="${item.ingredient_name}">
+        <label for="${item.ingredient_name}" id="${item.ingredient_id}">${item.ingredient_name}</label>`;
       list.appendChild(div);
     }
     INGREDIENT_PAGE++;
@@ -148,5 +148,9 @@ window.filterByIngredients = async function () {
   hideElement(FILTER_ID);
   showElement(LIST_ID);
   showElement(PAGINATION_ID);
-  showRecipes(1, `ingredient_ids=${ingredient_list}`);
+  if (ingredient_list != "[]") {
+    showRecipes(1, `ingredient_ids=${ingredient_list}`);
+  } else {
+    showRecipes(1);
+  }
 }

@@ -39,16 +39,16 @@ export async function putRecipeIngredient(id, recipe_id, ingredient_id, optional
   });
 }
 
-export async function listRecipeIngredients(recipe_id, ingredient_id = null) {
-  let params = "";
-  if (recipe_id != null || ingredient_id != null) {
-    params = "?";
-    if (recipe_id != null) {
-      params += "recipe_id=" + recipe_id;
-    }
-    if (ingredient_id != null) {
-      params += "&ingredient_id=" + ingredient_id;
-    }
+export async function listRecipeIngredients(recipe_id = null, ingredient_id = null, name_contains = null, page = 1, per_page = 25) {
+  let params = `?page=${page}&per_page=${per_page}`;
+  if (recipe_id != null) {
+    params += "&recipe_id=" + recipe_id;
+  }
+  if (ingredient_id != null) {
+    params += "&ingredient_id=" + ingredient_id;
+  }
+  if (name_contains != null) {
+    params += "&name_contains=" + name_contains;
   }
   return await fetch(RECIPE_INGREDIENT_ENDPOINT + params, {
     method: 'GET',
