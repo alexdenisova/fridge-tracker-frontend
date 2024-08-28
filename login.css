@@ -69,7 +69,6 @@ label {
 }
 
 input {
-    display: block;
     height: 50px;
     width: 100%;
     background-color: rgba(47, 60, 65, 0.07);
@@ -78,6 +77,12 @@ input {
     margin-top: 8px;
     font-size: 14px;
     font-weight: 300;
+}
+
+form i {
+    margin-left: -38px;
+    cursor: pointer;
+    font-size: 20px;
 }
 
 ::placeholder {

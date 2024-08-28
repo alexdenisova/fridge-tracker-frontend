@@ -7,7 +7,7 @@
     <title>Pantry Tracker Site</title>
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap">
     <link rel="stylesheet" href="login.css">
 
@@ -21,11 +21,16 @@
             <h3 id="login-title">Login Here</h3>
 
             <div class="login-error"><span id="login-error">Wrong username or password.</span></div>
-            <label for="username" style="margin-top:0px;">Username</label>
-            <input type="text" placeholder="Username" id="username">
+            <p>
+                <label for="username" style="margin-top:0px;">Username</label>
+                <input type="text" placeholder="Username" id="username">
+            </p>
 
-            <label for="password">Password</label>
-            <input type="password" placeholder="Password" id="password">
+            <p>
+                <label for="password">Password</label>
+                <input type="password" placeholder="Password" id="password">
+                <i class="bi bi-eye-slash" id="togglePassword"></i>
+            </p>
 
             <button type="button" id="main-button" onclick="login('username', 'password');">Log In</button>
             <div class="social">

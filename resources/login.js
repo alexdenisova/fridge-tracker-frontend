@@ -7,6 +7,16 @@ const LOGIN_ERROR_ID = "login-error";
 const MAIN_BUTTON_ID = "main-button";
 const SECONDARY_BUTTON_ID = "secondary-button";
 
+const togglePassword = document.getElementById("togglePassword");
+togglePassword.addEventListener("click", function () {
+  // toggle the type attribute
+  const type = password.getAttribute("type") === "password" ? "text" : "password";
+  password.setAttribute("type", type);
+
+  // toggle the icon
+  this.classList.toggle("bi-eye");
+});
+
 window.login = async function (username_id, password_id) {
   const username = document.getElementById(username_id).value;
   const password = document.getElementById(password_id).value;
@@ -53,13 +63,11 @@ window.secondaryButton = async function () {
     document.getElementById(MAIN_BUTTON_ID).innerText = sign_up_msg;
     document.getElementById(MAIN_BUTTON_ID).setAttribute("onclick", "createAccount('username', 'password');");
     document.getElementById(SECONDARY_BUTTON_ID).innerText = "Login";
-    document.getElementById('password').type = 'text'; // TODO: make this password and add an eye
   } else {
     document.getElementById(LOGIN_TITLE_ID).innerText = login_msg;
     document.getElementById(MAIN_BUTTON_ID).innerText = "Log In";
     document.getElementById(MAIN_BUTTON_ID).setAttribute("onclick", "login('username', 'password');");
     document.getElementById(SECONDARY_BUTTON_ID).innerText = "Sign up";
-    document.getElementById('password').type = 'password';
   }
 }
 
