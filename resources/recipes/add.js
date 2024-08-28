@@ -15,6 +15,9 @@ const ADD_RECIPE_BUTTON_ID = "add_recipe_button";
 const ADD_ID = "add_recipes_form";
 const PARSED_INGREDIENTS_BUTTON_ID = "parse_ingredients_button";
 
+let maxTags = 10,
+  tags = ["Webster", "CSS"];
+
 window.addRecipeButton = function (add_id) {
   if (clickButton(add_id) == "unpressed") {
     hideElement(ADD_ID);
@@ -57,10 +60,50 @@ function addForm() {
       <label for="image"><span>Image Link</span><input type="text" class="input-field" id="image" name="image"></label>
       <label for="last_cooked"><span>Last Cooked</span><input type="date" class="input-field" id="last_cooked" name="last_cooked" placeholder="YYYY-MM-DD"></label>
       <label for="rating"><span>Rating</span>${createStar(0)}</label>
+      <label for="categories"><span>Categories</span><div class="categories-content"><ul id="categories-list"><input type="text" class="input-field" id="categories" name="categories"></ul></div></label>
       <label for="notes"><span>Notes</span><textarea id="notes" name="notes" class="textarea-field"></textarea></label>
       <button type="button" onclick="submitRecipe();" value="Submit">Submit</button>
     </form>`;
   main.appendChild(div);
+  createTag();
+  const input = document.getElementById("categories");
+  console.log(input);
+
+  input.addEventListener("keyup", addTag);
+}
+
+function createTag() {
+  const ul = document.getElementById("categories-list");
+  console.log(ul);
+  ul.querySelectorAll("li").forEach((li) => li.remove());
+  tags
+    .slice()
+    .reverse()
+    .forEach((tag) => {
+      let liTag = `<li>${tag} <i class="fa fa-times" aria-hidden="true" onclick="remove(this, '${tag}')"></i></li>`;
+      ul.insertAdjacentHTML("afterbegin", liTag);
+    });
+}
+
+window.remove = function (element, tag) {
+  let index = tags.indexOf(tag);
+  tags = [...tags.slice(0, index), ...tags.slice(index + 1)];
+  element.parentElement.remove();
+}
+
+function addTag(e) {
+  if (e.key == "Enter") {
+    let tag = e.target.value.replace(/\s+/g, " ");
+    if (tag.length > 1 && !tags.includes(tag)) {
+      if (tags.length < 10) {
+        tag.split(",").forEach((tag) => {
+          tags.push(tag);
+          createTag();
+        });
+      }
+    }
+    e.target.value = "";
+  }
 }
 
 window.submitRecipe = async function () {
