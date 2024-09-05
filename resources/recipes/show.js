@@ -1,7 +1,9 @@
 import { getIngredientName, makeIngredientIfNotExists } from "../backend/ingredients.js";
+import { listRecipeCategories } from "../backend/recipe_categories.js";
 import { listRecipeIngredients, makeRecipeIngredientIfNotExists } from "../backend/recipe_ingredients.js";
 import { deleteRecipe, getRecipe, putRecipe } from "../backend/recipes.js";
-import { getOrNull, showMessage, showMessageThenRedirect } from "../utils.js";
+import { TAGS_INPUT, TAGS_LIST, createTag } from "../categories.js";
+import { checkAuth, getOrNull, showMessage, showMessageThenRedirect } from "../utils.js";
 import { INGREDIENT_TABLE_ID, main } from "./constants.js";
 import { createTable, ingredientRowChanged } from './ingredient_table.js';
 import { createStar, getRating } from './utils.js';
@@ -25,7 +27,7 @@ export function showRecipe(item_id) {
     div.setAttribute("id", CHANGE_ID);
 
     const recipe = await response.json();
-    const ingredient_response = await listRecipeIngredients(recipe.id);
+    const ingredient_response = await listRecipeIngredients(recipe.id); // TODO: check that no more pages left
     if (!response.ok) {
       if (response.status == 401) {
         redirectToLogin();
@@ -42,11 +44,18 @@ export function showRecipe(item_id) {
       parsed_ingredients.push({ 'amount': amount, 'unit': unit, 'name': name, 'optional': optional });
     }
 
+    const categories_response = await listRecipeCategories(recipe.id);
+    if (!response.ok) {
+      checkAuth(response.status);
+      showMessage("Could not get recipe categories.", false);
+    }
+
     div.innerHTML = `
     <div class="form-heading">${recipe.name}</div>
       <form>
         <label for="recipe_name"><span>Recipe Name<span class="required">*</span></span><input type="text" class="input-field" id="recipe_name" name="recipe_name" value="${recipe.name}"></label>
         <label for="rating"><span>Rating</span>${createStar(recipe.rating)}</label>
+        <label for="categories"><span>Categories</span><div class="categories-content"><ul id="${TAGS_LIST}"><input type="text" class="input-field" id="${TAGS_INPUT}" name="categories"></ul></div></label>
         <label for="last_cooked"><span>Last Cooked</span><input type="date" class="input-field" id="last_cooked" name="last_cooked" placeholder="YYYY-MM-DD" value="${recipe.last_cooked || ""}"></label>
         <label for="notes"><span>Notes</span><textarea id="notes" name="notes" class="textarea-field">${recipe.notes || ""}</textarea></label>
         <label for="link"><span>Link</span><input type="text" class="input-field" id="link" name="link" value="${recipe.link || ""}"></label>
@@ -60,6 +69,9 @@ export function showRecipe(item_id) {
         <button type="button" id="${DELETE_ID}" onclick="removeRecipe('${item_id}');" value="Delete" style="width:20%;height:100%;">Delete</button>
       </form>`;
     main.appendChild(div);
+    for (const c of (await categories_response.json()).items) {
+      createTag(c.category_name);
+    }
   });
 }
 

@@ -1,10 +1,12 @@
 const API_PREFIX = "/api"
+export const CATEGORY_ENDPOINT = `${API_PREFIX}/categories`;
 export const INGREDIENT_ENDPOINT = `${API_PREFIX}/ingredients`;
 export const INGREDIENT_NAME_ENDPOINT = `${API_PREFIX}/ingredient_names`;
 export const LOGIN_ENDPOINT = `${API_PREFIX}/login`;
 export const PANTRY_ITEMS_ENDPOINT = `${API_PREFIX}/pantry_items`;
 export const PARSE_INGREDIENTS_ENDPOINT = `${API_PREFIX}/parse_ingredients`;
 export const PARSE_RECIPE_LINK_ENDPOINT = `${API_PREFIX}/parse_recipe_link`;
+export const RECIPE_CATEGORY_ENDPOINT = `${API_PREFIX}/recipe_categories`;
 export const RECIPE_INGREDIENT_ENDPOINT = `${API_PREFIX}/recipe_ingredients`;
 export const RECIPE_ENDPOINT = `${API_PREFIX}/recipes`;
 export const USERS_ENDPOINT = `${API_PREFIX}/users`;

@@ -23,6 +23,16 @@ window.removeElement = function (id) {
   el.parentElement.removeChild(el);
 }
 
+window.remove = function (element) {
+  element.parentElement.remove();
+}
+
+export function checkAuth(response_status) {
+  if (response_status == 401) {
+    redirectToLogin();
+  }
+}
+
 export function clickButton(button_id) {
   if (document.getElementById(button_id).style.backgroundColor == "rgb(67, 123, 120)") { // if button is pressed
     document.getElementById(button_id).style.backgroundColor = "#b4d6b4";
