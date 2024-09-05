@@ -84,8 +84,6 @@ window.submitRecipe = async function () {
   }
   const notes = document.getElementById('notes').value;
 
-
-
   const response = await postRecipe(name, prep_time_mins, total_time_mins, link, instructions, image, last_cooked, rating, notes);
   if (response.ok) {
     const data = await response.json();
