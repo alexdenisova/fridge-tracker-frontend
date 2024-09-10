@@ -8,14 +8,16 @@ const MAIN_BUTTON_ID = "main-button";
 const SECONDARY_BUTTON_ID = "secondary-button";
 
 const togglePassword = document.getElementById("togglePassword");
-togglePassword.addEventListener("click", function () {
-  // toggle the type attribute
-  const type = password.getAttribute("type") === "password" ? "text" : "password";
-  password.setAttribute("type", type);
+if (togglePassword != null) {
+  togglePassword.addEventListener("click", function () {
+    // toggle the type attribute
+    const type = password.getAttribute("type") === "password" ? "text" : "password";
+    password.setAttribute("type", type);
 
-  // toggle the icon
-  this.classList.toggle("bi-eye");
-});
+    // toggle the icon
+    this.classList.toggle("bi-eye");
+  });
+}
 
 window.login = async function (username_id, password_id) {
   const username = document.getElementById(username_id).value;
