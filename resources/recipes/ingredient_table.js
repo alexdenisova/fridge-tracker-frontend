@@ -55,10 +55,10 @@ window.change = function (id) {
 }
 
 export function ingredientRowChanged(tr_id) {
-  return document.getElementById(tr_id + "-0").dataset.changed ||
-    document.getElementById(tr_id + "-1").dataset.changed ||
-    document.getElementById(tr_id + "-2").dataset.changed ||
-    document.getElementById(tr_id + "-3").dataset.changed;
+  return document.getElementById(tr_id + "-0").dataset.changed == "true" ||
+    document.getElementById(tr_id + "-1").dataset.changed == "true" ||
+    document.getElementById(tr_id + "-2").dataset.changed == "true" ||
+    document.getElementById(tr_id + "-3").dataset.changed == "true";
 }
 
 function nullToEmpty(str) {

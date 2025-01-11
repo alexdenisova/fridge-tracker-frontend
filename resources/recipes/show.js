@@ -125,8 +125,24 @@ async function postOrPutRecipeIngredients(recipe_id) {
   let all_ingredients_added = true;
   for (var i = 0; i < table.children[1].childElementCount; i++) {
     const tr_id = table.children[1].children[i].id;
-    if (ingredientRowChanged(tr_id) == "true") {
+    if (ingredientRowChanged(tr_id) == true) {
       console.log("Updating recipe ingredient " + tr_id);
+      let amount = getOrNull(document.getElementById(tr_id + "-0"), "value");
+      let unit = getOrNull(document.getElementById(tr_id + "-1"), "value");
+      let name = document.getElementById(tr_id + "-2").value;
+      let optional = document.getElementById(tr_id + "-3").checked;
+      const ingredient_id = await makeIngredientIfNotExists(name);
+
+      const response = await makeRecipeIngredientIfNotExists(recipe_id, ingredient_id, optional, amount, unit);
+      if (!response.ok) {
+        all_ingredients_added = false;
+      }
+    }
+  }
+  if (table.children.length > 1) {
+    for (var i = 2; i < table.children.length; i++) {
+      const tr_id = table.children[i].id;
+      console.log("Creating new recipe ingredient");
       let amount = getOrNull(document.getElementById(tr_id + "-0"), "value");
       let unit = getOrNull(document.getElementById(tr_id + "-1"), "value");
       let name = document.getElementById(tr_id + "-2").value;

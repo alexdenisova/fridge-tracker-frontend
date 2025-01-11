@@ -11,7 +11,7 @@ export async function postRecipeIngredient(recipe_id, ingredient_id, optional = 
     body: JSON.stringify({
       "recipe_id": recipe_id,
       "ingredient_id": ingredient_id,
-      "optional": optional === "true",
+      "optional": optional == true,
       ...amount && { 'amount': amount },
       ...unit && { 'unit': unit },
     })
@@ -30,7 +30,7 @@ export async function putRecipeIngredient(id, recipe_id, ingredient_id, optional
     body: JSON.stringify({
       "recipe_id": recipe_id,
       "ingredient_id": ingredient_id,
-      "optional": optional === "true",
+      "optional": optional == true,
       ...amount && { 'amount': amount },
       ...unit && { 'unit': unit },
     })
